@@ -37,18 +37,18 @@
                     @csrf
                     <div id="dynamic-input-container">
                         <div class="dynamic-input-row row mt-3 align-items-center">
-                            <div class="col-md-4 d-flex align-items-center">
+                            <div class="col-12 col-sm-6 d-flex align-items-center">
                                 <div class="form-floating flex-grow-1">
                                     <select class="form-select select2" name="nama_alat[]" required onchange="fillSatuan(this)">
                                         <option selected disabled>Pilih Alat</option>
-                                        @foreach($gabung as $item)
+                                        @foreach($alat as $item)
                                             <option value="{{ $item->nama_alat }}" data-stok="{{ $item->stok }}" data-satuan="{{ $item->satuan }}">{{ $item->nama_alat }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <button type="button" class="btn btn-success btn-sm ms-2" onclick="addInputRow()">Tambah Alat</button>
                             </div>
-                            <div class="col-md-4 d-flex mt-2 align-items-center">
+                            <div class="col-12 col-sm-6 d-flex mt-2 align-items-center">
                                 <div class="input-group">
                                     <input type="number" class="form-control" name="jumlah[]" min="0" placeholder="Jumlah" required>
                                     <input type="text" class="form-control" name="satuan[]" placeholder="Satuan" readonly>
@@ -57,21 +57,21 @@
                         </div>
                     </div>
 
-                    <div class="mt-4 pt-4 col-8">
+                    <div class="mt-4 col-12">
                         <div class="form-floating">
                             <input type="text" class="form-control" id="tempat_peminjaman" name="tempat_peminjaman" placeholder="Tempat Peminjaman" required>
                             <label for="tempat_peminjaman">Tempat Peminjaman</label>
                         </div>
                     </div>
 
-                    <div class="mt-4 pt-4 col-4">
+                    <div class="mt-4 col-12 col-sm-6">
                         <div class="form-floating">
                             <input type="date" class="form-control" name="tanggal_peminjaman" id="tanggal_peminjaman" placeholder="Tanggal Pinjam" required>
                             <label for="tanggal_peminjaman">Tanggal Pinjam</label>
                         </div>
                     </div>
 
-                    <div class="col-12">
+                    <div class="col-12 mt-4">
                         <div class="form-floating">
                             <textarea class="form-control" placeholder="Keperluan" name="keperluan" id="keperluan" style="height: 100px;" required></textarea>
                             <label for="keperluan">Keterangan</label>
@@ -119,18 +119,18 @@
 
         var template = `
             <div class="dynamic-input-row row mt-3 align-items-center" id="dynamic-input-row-${dynamicInputIndex}">
-                <div class="col-md-4 d-flex align-items-center">
+                <div class="col-12 col-sm-6 d-flex align-items-center">
                     <div class="form-floating flex-grow-1">
                         <select class="form-select select2" name="nama_alat[]" required onchange="fillSatuan(this)">
                             <option selected disabled>Pilih Alat</option>
-                            @foreach($gabung as $item)
+                            @foreach($alat as $item)
                                 <option value="{{ $item->nama_alat }}" data-stok="{{ $item->stok }}" data-satuan="{{ $item->satuan }}">{{ $item->nama_alat }}</option>
                             @endforeach
                         </select>
                     </div>
                     <button type="button" class="btn btn-danger btn-sm ms-2" onclick="removeInputRow(${dynamicInputIndex})">Hapus Baris</button>
                 </div>
-                <div class="col-md-4 mt-2 d-flex align-items-center">
+                <div class="col-12 col-sm-6 d-flex mt-2 align-items-center">
                     <div class="input-group">
                         <input type="number" class="form-control" name="jumlah[]" min="0" placeholder="Jumlah" required>
                         <input type="text" class="form-control" name="satuan[]" placeholder="Satuan" readonly>

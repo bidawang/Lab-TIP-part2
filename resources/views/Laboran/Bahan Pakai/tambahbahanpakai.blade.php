@@ -9,11 +9,16 @@
     // Mengonversi format nama: mengubah huruf pertama dari setiap kata menjadi huruf besar
     $formattedName = ucwords(str_replace('.', ' ', $nameParts[0]));
 @endphp
+
 <script>
     // Data bahan dalam format JSON
     var bahanData = @json($bahan);
 </script>
+
 <body>
+<!-- Include the Bootstrap CSS CDN -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
 @include('auth.headerbody')
 @include('Laboran/sidebar.side')
 
@@ -59,7 +64,6 @@
                         </div>
                     </div>
 
-                    
                     <div class="col-4 mt-4 pt-4">
                         <div class="form-floating">
                             <input type="date" class="form-control" id="tanggal_pemakaian" name="tanggal_pemakaian" placeholder="Tanggal Pemakaian" required>
@@ -88,6 +92,11 @@
 </main>
 
 @include('auth.footer')
+
+<!-- Include jQuery and Bootstrap JS CDN -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
     $(document).ready(function() {
         // Initialize Select2 for static and dynamically added elements
@@ -145,6 +154,7 @@
         $('select.select2').select2();
     }
 </script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var today = new Date().toISOString().split('T')[0]; // Mengambil tanggal hari ini dalam format YYYY-MM-DD

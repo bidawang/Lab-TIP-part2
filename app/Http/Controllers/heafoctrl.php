@@ -61,7 +61,7 @@ class heafoctrl extends Controller
     $user = User::where('google_id', $google_id)->first();
 
     // Mengirimkan data dari tiga model ke tampilan
-    return view('Laboran/Draft/Personal.drafalat', [
+    return view('Laboran/draft/personal.drafalat', [
         'alat_pinjam' => $alat_pinjam,
         'bahan_pakai' => $bahan_pakai,
         'pinjam_ruangan' => $pinjam_ruangan,
@@ -87,7 +87,7 @@ public function indexDraft(Request $request)
     $bahan_pakai = $bahan_pakai->get();
     $pinjam_ruangan = $pinjam_ruangan->get();
 
-    return view('Laboran.Draft.drafalat', compact('alat_pinjam', 'bahan_pakai', 'pinjam_ruangan'));
+    return view('Laboran.draft.drafalat', compact('alat_pinjam', 'bahan_pakai', 'pinjam_ruangan'));
 }
 
     public function statbah(Request $request){
@@ -150,7 +150,7 @@ public function indexDraft(Request $request)
         $alat_pinjam = mdlalatpjm::all();
         $bahan_pakai = mdlbahanuse::all();
         $pinjam_ruangan = mdlruangpjm::all();
-        return view('Laboran/Draft.riwayat', [
+        return view('Laboran/draft.riwayat', [
             'alat_pinjam' => $alat_pinjam,
             'bahan_pakai' => $bahan_pakai,
             'pinjam_ruangan' => $pinjam_ruangan,

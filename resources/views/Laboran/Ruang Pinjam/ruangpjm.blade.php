@@ -105,9 +105,9 @@
                                 {{-- <a href="javascript:void(0);" onclick="printTable();" class="btn btn-success">
                                     <i class="bi bi-printer"></i> Print Riwayat Peminjaman
                                 </a> --}}
-                                <a href="{{ route('printruangpjm')}}" class="btn btn-success">
+                                <!-- <a href="{{ route('printruangpjm')}}" class="btn btn-success">
                                     <i class="bi bi-printer"></i> Print Perizinan
-                                </a>
+                                </a> -->
                             </div>
                         <!-- Table with stripped rows -->
                         <div id="printableArea" class="table-responsive">

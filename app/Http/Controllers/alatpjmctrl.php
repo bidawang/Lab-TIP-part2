@@ -13,16 +13,14 @@ class alatpjmctrl extends Controller
     public function index(){
         $google_id = auth()->user()->google_id;
         $alat = mdlalatpjm::where('google_id', $google_id)->get();
-        return view('Laboran/alat pinjam.alatpjm', compact('alat'));
+        return view('Laboran/Alat Pinjam.alatpjm', compact('alat'));
         
     }
 
     public function tindex(){
         $alat = mdlalat::all();
-        $alat_bmn = mblbmn::all();
-        $gabung = $alat->concat($alat_bmn);
 
-        return view('Laboran/Alat Pinjam.tambahalatpjm',compact('gabung'));
+        return view('Laboran/Alat Pinjam.tambahalatpjm',compact('alat'));
     }
     
     public function print() {
@@ -31,7 +29,7 @@ class alatpjmctrl extends Controller
         $startDate = Carbon::now()->subDays(30)->toDateString();
         $alatpjm = mdlalatpjm::whereBetween('created_at', [$startDate, $endDate])->get();
         $alat = mdlalat::all();    
-        return view('Laboran/alat pinjam.printtalatpjm', compact('alatpjm', 'alat', 'startDate', 'endDate'));
+        return view('Laboran/Alat Pinjam.printtalatpjm', compact('alatpjm', 'alat', 'startDate', 'endDate'));
     }
     
     
@@ -53,7 +51,7 @@ class alatpjmctrl extends Controller
             $alat = mdlalat::all(); // Mengapa mengambil semua data alat? Sesuaikan jika tidak diperlukan.
             
             // Kirim data hasil pencarian ke view
-            return view('Laboran/alat pinjam.printtalatpjm', compact('alatpjm', 'alat', 'startDate', 'endDate'));
+            return view('Laboran/Alat Pinjam.printtalatpjm', compact('alatpjm', 'alat', 'startDate', 'endDate'));
         } catch (\Exception $e) {
             // Handle error jika terjadi kesalahan
             return redirect()->back()->withErrors('Terjadi kesalahan saat melakukan pencarian.');
@@ -79,7 +77,6 @@ class alatpjmctrl extends Controller
         foreach($validatedData['nama_alat'] as $key => $value){
             // Find the alat
             $alat = mdlalat::where('nama_alat', $validatedData['nama_alat'][$key])->first();
-            $bmn = mblbmn::where('nama_alat', $validatedData['nama_alat'][$key])->first();
 
             if ($alat) {
                 // Reduce the stock of the alat
@@ -99,24 +96,9 @@ class alatpjmctrl extends Controller
                     'status' => $validatedData['status']
                 ]);
             }
-            elseif($bmn){
-                $bmn->stok -= $validatedData['jumlah'][$key];
-                $bmn->save();
-    
-                // Create a new instance of mdlalatpjm for each set of data
-                mdlalatpjm::create([
-                    'nama_peminjam' => $validatedData['nama_peminjam'],
-                    'nama_alat' => $validatedData['nama_alat'][$key],
-                    'jumlah' => $validatedData['jumlah'][$key],
-                    'satuan' => $validatedData['satuan'][$key],
-                    'tempat_peminjaman' => $validatedData['tempat_peminjaman'],
-                    'tanggal_peminjaman' => $validatedData['tanggal_peminjaman'],
-                    'keperluan' => $validatedData['keperluan'],
-                    'google_id' => $validatedData['google_id'],
-                    'status' => $validatedData['status']
-                ]);
-            } else {
-                return redirect()->route('bahan')->with('error', 'Alat tidak ditemukan');
+            
+             else {
+                return redirect()->route('alat')->with('error', 'Alat tidak ditemukan');
             }
         }
     
@@ -181,9 +163,8 @@ class alatpjmctrl extends Controller
     
         // Ambil data alat dari tabel 'alat' dan 'bmn' berdasarkan 'nama_alat'
         $alat = mdlalat::where('nama_alat', $alatPinjam->nama_alat)->first();
-        $bmn = mblbmn::where('nama_alat', $alatPinjam->nama_alat)->first();
     
-        if(!$alat && !$bmn){
+        if(!$alat){
             return redirect()->route('alatpjm')->with('error', 'Alat tidak ditemukan dalam stok');
         }
     
@@ -191,11 +172,6 @@ class alatpjmctrl extends Controller
         if ($alat) {
             $alat->stok += $jumlah;
             $alat->save();
-        }
-    
-        if ($bmn) {
-            $bmn->stok += $jumlah;
-            $bmn->save();
         }
     
         // Update data alat pinjam dengan mengurangi jumlah yang dikembalikan

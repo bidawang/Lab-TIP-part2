@@ -22,11 +22,11 @@ class mdlalatpjm extends Model
         'google_id',
         'status'
     ];
-    protected $casts = [
-        'waktu_mulai' => 'datetime',
-        'waktu_akhir' => 'datetime',
-        // other casts...
-    ];
+    // protected $casts = [
+    //     'waktu_mulai' => 'datetime',
+    //     'waktu_akhir' => 'datetime',
+    //     // other casts...
+    // ];
     public function alat()
 {
     return $this->belongsTo('App\Models\mdlalat', 'nama_alat', 'nama_alat');
