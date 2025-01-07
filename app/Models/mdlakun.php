@@ -9,4 +9,5 @@ class mdlakun extends Model
 {
     use HasFactory;
     protected $table = 'users'; // Nama tabel dalam basis data
+    protected $fillable = ['level','email'];
 }

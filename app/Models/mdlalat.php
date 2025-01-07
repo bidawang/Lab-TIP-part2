@@ -14,7 +14,15 @@ class mdlalat extends Model
         'nama_alat',
         'stok',
         'satuan',
-        'foto_alat'
+        'foto_alat',
+        'id_pembelian',
+        'keterangan',
+        'google_id'
     ];
+
+    public function rusak()
+    {
+        return $this->hasMany(AlatRusak::class, 'id_alat', 'id_alat');
+    }
 
 }

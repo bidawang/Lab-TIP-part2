@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-  <title>Dashboard - NiceAdmin Bootstrap Template</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>laboratorium TIP</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -25,17 +23,21 @@
   <link href="../../NiceAdmin/assets/vendor/quill/quill.bubble.css" rel="stylesheet">
   <link href="../../NiceAdmin/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
   <link href="../../NiceAdmin/assets/vendor/simple-datatables/style.css" rel="stylesheet">
-
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
-
-  <!-- Template Main CSS File -->
   <link href="../../NiceAdmin/assets/css/style.css" rel="stylesheet">
 
-  <!-- =======================================================
-  * Template Name: NiceAdmin
-  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-  * Updated: Apr 20 2024 with Bootstrap v5.3.3
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
+  <!-- Select2 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet">
+
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+  <style>
+    .card-img-top {
+    height: 250px; /* Fixed height for all images */
+    object-fit: cover; /* Ensure images cover the space while maintaining aspect ratio */
+  }
+  .custom-border {
+    border: 1px solid #000; /* Thicker and darker border */
+  }
+</style>
 </head>
+<body>

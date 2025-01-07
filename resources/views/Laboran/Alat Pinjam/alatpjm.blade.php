@@ -1,4 +1,69 @@
-@include('auth.header')
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Peminjaman Alat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <style>
+        @media print {
+            #dataTableArea {
+                display: none;
+            }
+            #printableArea {
+                display: block;
+            }
+        }
+
+        .table-responsive {
+            margin-top: 1rem;
+        }
+
+        /* Menyesuaikan tabel untuk layar kecil */
+        @media (max-width: 576px) {
+            .table-responsive {
+                font-size: 0.75rem; /* Menyesuaikan ukuran font */
+            }
+
+            .table-responsive th,
+            .table-responsive td {
+                padding: 0.5rem; /* Mengurangi padding untuk tabel pada layar kecil */
+            }
+
+            .table {
+                width: 100%; /* Memastikan tabel mengisi lebar kontainer */
+                display: block; /* Membuat tabel bisa digulirkan horizontal */
+                overflow-x: auto; /* Menambahkan scrollbar horizontal jika diperlukan */
+            }
+        }
+
+        /* Menata tombol */
+        .button-group {
+            display: flex;
+            flex-wrap: wrap; /* Memungkinkan tombol berjejer ke bawah pada layar kecil */
+            gap: 0.5rem;
+        }
+
+        .button-group .btn {
+            flex: 1;
+        }
+
+        @media (min-width: 768px) {
+            .button-group {
+                justify-content: flex-end; /* Menjaga tombol lain di kanan pada layar besar */
+            }
+
+            .button-group .btn {
+                width: auto;
+            }
+
+            .button-group .btn:first-child {
+                margin-right: auto; /* Mengatur tombol "Kembali" tetap di kiri pada layar besar */
+            }
+        }
+    </style>
+</head>
 @php
     // Mendapatkan alamat email pengguna yang sedang masuk
     $email = Auth::user()->email;
@@ -11,212 +76,76 @@
 @endphp
 
 <body>
+@include('auth.header')
+@include('auth.headerbody')
+@include('Laboran/sidebar.side')
 
-  <!-- ======= Header ======= -->
-  <header id="header" class="header fixed-top d-flex align-items-center">
-
-    <div class="d-flex align-items-center justify-content-between">
-      <a href="index.html" class="logo d-flex align-items-center">
-        <img src="../../NiceAdmin/assets/img/logo.png" alt="">
-        <span class="d-none d-lg-block">NiceAdmin</span>
-      </a>
-      <i class="bi bi-list toggle-sidebar-btn"></i>
-    </div><!-- End Logo -->
-
-    <div class="search-bar">
-      <form class="search-form d-flex align-items-center" method="POST" action="#">
-        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
-        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
-      </form>
-    </div><!-- End Search Bar -->
-
-    <nav class="header-nav ms-auto">
-      <ul class="d-flex align-items-center">
-
-        <li class="nav-item d-block d-lg-none">
-          <a class="nav-link nav-icon search-bar-toggle " href="#">
-            <i class="bi bi-search"></i>
-          </a>
-        </li><!-- End Search Icon-->
-
-       
-
-        </li><!-- End Notification Nav -->
-
-        <li class="nav-item dropdown">
-
-          <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-            <i class="bi bi-chat-left-text"></i>
-            <span class="badge bg-success badge-number">3</span>
-          </a><!-- End Messages Icon -->
-
-          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
-            <li class="dropdown-header">
-              You have 3 new messages
-              <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="message-item">
-              <a href="#">
-                <img src="../../NiceAdmin/assets/img/messages-1.jpg" alt="" class="rounded-circle">
-                <div>
-                  <h4>Maria Hudson</h4>
-                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                  <p>4 hrs. ago</p>
-                </div>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="message-item">
-              <a href="#">
-                <img src="../../NiceAdmin/assets/img/messages-2.jpg" alt="" class="rounded-circle">
-                <div>
-                  <h4>Anna Nelson</h4>
-                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                  <p>6 hrs. ago</p>
-                </div>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="message-item">
-              <a href="#">
-                <img src="../../NiceAdmin/assets/img/messages-3.jpg" alt="" class="rounded-circle">
-                <div>
-                  <h4>David Muldon</h4>
-                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                  <p>8 hrs. ago</p>
-                </div>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="dropdown-footer">
-              <a href="#">Show all messages</a>
-            </li>
-
-          </ul><!-- End Messages Dropdown Items -->
-
-        </li><!-- End Messages Nav -->
-
-        <li class="nav-item dropdown pe-3">
-
-          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-            <img src="Profil/{{ Auth::user()->avatar}}" alt="Profile" class="rounded-circle">
-            <span class="d-none d-md-block dropdown-toggle ps-2">{{ $formattedName}}</span>
-          </a><!-- End Profile Iamge Icon -->
-
-          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-            <li class="dropdown-header">
-              <h6>{{ $formattedName}}</h6>
-              <span>Web Designer</span>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="{{ Route('profile') }}">
-                <i class="bi bi-person"></i>
-                <span>My Profile</span>
-              </a>
-            </li>
-
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="#">
-                <i class="bi bi-box-arrow-right"></i>
-                <span>Sign Out</span>
-              </a>
-            </li>
-
-          </ul><!-- End Profile Dropdown Items -->
-        </li><!-- End Profile Nav -->
-
-      </ul>
-    </nav><!-- End Icons Navigation -->
-
-  </header><!-- End Header -->
-
-  <!-- ======= Sidebar ======= -->
-  @include('laboran/sidebar.side')
-
-  <main id="main" class="main">
-
+<main id="main" class="main">
     <div class="pagetitle">
-      <h1>Dashboard</h1>
-      <nav>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item active">Dashboard</li>
-        </ol>
-      </nav>
+        <h1>Peminjaman Alat</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active">Home</li>
+                <li class="breadcrumb-item active">Alat</li>
+                <li class="breadcrumb-item active">Peminjaman Alat</li>
+            </ol>
+        </nav>
     </div><!-- End Page Title -->
+
     <section class="section">
-      <div class="row">
-        <div class="col-lg-12">
-
-          <div class="card">
-            <div class="card-body">
-              <a href="{{ route('alat')}}" class="btn btn-primary mt-3">Kembali</a>
-              <a href="{{ route('talatpjm')}}" class="btn btn-primary mt-3">Tambah Pinjam Alat</a>
-              <!-- Table with stripped rows -->
-              <table class="table datatable">
-                <thead>
-                  <tr>
-                    <th>
-                      <b>N</b>ame
-                    </th>
-                    <th>Jumlah</th>
-                    <th>Satuan</th>
-                    <th>Status</th>
-                    <th>Option</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @foreach($alat as $data)
-                  <tr>
-            <td>{{$data->nama_alat}}</td>
-            <td style="border: 1px solid black; padding: 5px;">
-            <img src="{{ asset('Foto Alat/'. $data->foto_alat) }}" width="200" height="150" alt="Foto Alat" style="display: block;">
-            </td>
-            <td>{{$data->stok}}</td>
-            <td>{{$data->satuan}}</td>
-                    <td>
-                      <a href=""><i class="bi bi-pencil-square"></i>Edit</a>
-                        <form action="/alat-hapus" method="POST" style="display: inline;">
-                            @csrf
-                            @method('DELETE') <!-- Tambahkan ini untuk menyesuaikan metode dengan rute DELETE -->
-                            <input type="hidden" name="id_alat" value="{{ $data->id_alat }}">
-                            <button type="submit" onclick="return confirm('Apakah Anda yakin ingin menghapus semua data?')">
-                            <i class="bi bi-trash3"></i>Hapus
-                            </button>
-                        </form>
-                    </td>
-                  </tr>
-                  @endforeach
-                </tbody>
-              </table>
-              <!-- End Table with stripped rows -->
-
+        @if (@session('success'))
+            <div id="alert" class="alert alert-success" onclick="this.style.display='none'">
+                {{ Session::get('success') }}
             </div>
-          </div>
+        @endif
 
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+    
+                            <a href="{{ route('alat') }}" class="btn btn-danger mt-3"><i class="bi bi-arrow-left-circle"></i> Kembali</a>
+                            <a href="{{ route('talatpjm') }}" class="btn btn-info mt-3"><i class="bi bi-plus-circle"></i> Pinjam Alat</a>
+                            <a href="{{ route('printalatpjm') }}" class="btn btn-success mt-3"><i class="bi bi-printer"></i> Print</a>
+
+                        <!-- Table with stripped rows -->
+                        <div id="printableArea" class="table-responsive">
+                            <table class="table datatable">
+                                <thead>
+                                    <tr>
+                                        <th><b>N</b>ama</th>
+                                        <th>Alat</th>
+                                        <th>Jumlah</th>
+                                        <th>Tanggal</th>
+                                        <th>Waktu</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($alat as $data)
+                                    <tr>
+                                        <td>{{ $data->nama_peminjam }}</td>
+                                        <td>{{ $data->nama_alat }}</td>
+                                        <td>{{ $data->jumlah }} {{ $data->satuan }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($data->tanggal_peminjaman)->isoFormat('DD MMMM YYYY') }}</td>
+                                        <td>{{ $data->status }}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- End Table with stripped rows -->
+
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </section>
-  </main>
-  
+</main>
+
 @include('auth.footer')
 
-</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
+</body>
 </html>

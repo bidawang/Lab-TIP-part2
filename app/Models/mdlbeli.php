@@ -19,6 +19,7 @@ class mdlbeli extends Model
         'nama_toko',
         'jumlah',
         'keterangan',
+        'google_id'
     ];
 
 }

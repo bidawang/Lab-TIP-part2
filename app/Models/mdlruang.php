@@ -9,13 +9,15 @@ class mdlruang extends Model
 {
     use HasFactory;
     protected $table = 'ruangan'; // Nama tabel dalam basis data
-    protected $primaryKey = 'id_alat';
+    protected $primaryKey = 'id_ruangan';
     protected $fillable = [
         'nama_ruangan',
         'lantai',
         'gedung',
-        'laboran',
-        'foto_ruangan'
+        'Laboran',
+        'foto_ruangan',
+        'google_id',
+        'keterangan'
     ];
 
 }

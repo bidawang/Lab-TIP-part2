@@ -1,0 +1,30 @@
+    /* Gaya tambahan untuk Select2 */
+    .select2-container .select2-selection--single {
+        height: 38px; /* Atur tinggi sesuai kebutuhan */
+        padding: 0 12px; /* Padding kanan dan kiri */
+        font-size: 14px; /* Ukuran font */
+        line-height: 1.5;
+        border-radius: 4px; /* Border radius */
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        color: #495057; /* Warna teks */
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 36px; /* Tinggi panah dropdown */
+        right: 10px; /* Jarak dari kanan */
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow b {
+        top: 50%; /* Posisi vertikal panah */
+        margin-top: -2px; /* Penyesuaian vertikal */
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow b:before {
+        content: ''; /* Menghilangkan teks panah */
+    }
+
+    .select2-container--open .select2-dropdown--below {
+        z-index: 9999; /* Z-index dropdown */
+    }

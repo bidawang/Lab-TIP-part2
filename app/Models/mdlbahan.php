@@ -14,6 +14,9 @@ class mdlbahan extends Model
         'nama_bahan',
         'stok',
         'satuan',
-        'foto_bahan'
+        'foto_bahan',
+        'id_pembelian',
+        'keterangan',
+        'google_id'
     ];
 }

@@ -1,220 +1,166 @@
 @include('auth.header')
-@php
-    // Mendapatkan alamat email pengguna yang sedang masuk
-    $email = Auth::user()->email;
-    
-    // Memisahkan bagian nama dari alamat email
-    $nameParts = explode('@', $email);
-    
-    // Mengonversi format nama: mengubah huruf pertama dari setiap kata menjadi huruf besar
-    $formattedName = ucwords(str_replace('.', ' ', $nameParts[0]));
-@endphp
 <body>
-
-  <!-- ======= Header ======= -->
-  <header id="header" class="header fixed-top d-flex align-items-center">
-
-    <div class="d-flex align-items-center justify-content-between">
-      <a href="index.html" class="logo d-flex align-items-center">
-        <img src="../../NiceAdmin/assets/img/logo.png" alt="">
-        <span class="d-none d-lg-block">NiceAdmin</span>
-      </a>
-      <i class="bi bi-list toggle-sidebar-btn"></i>
-    </div><!-- End Logo -->
-
-    <div class="search-bar">
-      <form class="search-form d-flex align-items-center" method="POST" action="#">
-        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
-        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
-      </form>
-    </div><!-- End Search Bar -->
-
-    <nav class="header-nav ms-auto">
-      <ul class="d-flex align-items-center">
-
-        <li class="nav-item d-block d-lg-none">
-          <a class="nav-link nav-icon search-bar-toggle " href="#">
-            <i class="bi bi-search"></i>
-          </a>
-        </li><!-- End Search Icon-->
-
-       
-
-        </li><!-- End Notification Nav -->
-
-        <li class="nav-item dropdown">
-
-          <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-            <i class="bi bi-chat-left-text"></i>
-            <span class="badge bg-success badge-number">3</span>
-          </a><!-- End Messages Icon -->
-
-          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
-            <li class="dropdown-header">
-              You have 3 new messages
-              <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="message-item">
-              <a href="#">
-                <img src="../../NiceAdmin/assets/img/messages-1.jpg" alt="" class="rounded-circle">
-                <div>
-                  <h4>Maria Hudson</h4>
-                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                  <p>4 hrs. ago</p>
-                </div>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="message-item">
-              <a href="#">
-                <img src="../../NiceAdmin/assets/img/messages-2.jpg" alt="" class="rounded-circle">
-                <div>
-                  <h4>Anna Nelson</h4>
-                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                  <p>6 hrs. ago</p>
-                </div>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="message-item">
-              <a href="#">
-                <img src="../../NiceAdmin/assets/img/messages-3.jpg" alt="" class="rounded-circle">
-                <div>
-                  <h4>David Muldon</h4>
-                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                  <p>8 hrs. ago</p>
-                </div>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="dropdown-footer">
-              <a href="#">Show all messages</a>
-            </li>
-
-          </ul><!-- End Messages Dropdown Items -->
-
-        </li><!-- End Messages Nav -->
-
-        <li class="nav-item dropdown pe-3">
-
-          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-            <img src="Profil/{{ Auth::user()->avatar}}" alt="Profile" class="rounded-circle">
-            <span class="d-none d-md-block dropdown-toggle ps-2">{{ $formattedName}}</span>
-          </a><!-- End Profile Iamge Icon -->
-
-          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-            <li class="dropdown-header">
-              <h6>{{ $formattedName}}</h6>
-              <span>Web Designer</span>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="{{ Route('profile') }}">
-                <i class="bi bi-person"></i>
-                <span>My Profile</span>
-              </a>
-            </li>
-
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="#">
-                <i class="bi bi-box-arrow-right"></i>
-                <span>Sign Out</span>
-              </a>
-            </li>
-
-          </ul><!-- End Profile Dropdown Items -->
-        </li><!-- End Profile Nav -->
-
-      </ul>
-    </nav><!-- End Icons Navigation -->
-
-  </header><!-- End Header -->
-
-  <!-- ======= Sidebar ======= -->
-  @include('laboran/sidebar.side')
+@include('auth.headerbody')
+@include('Laboran/sidebar.side')
 
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Dashboard</h1>
+      <h1>Pembelian</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item active">Dashboard</li>
+          <li class="breadcrumb-item active">Home</li>
+          <li class="breadcrumb-item active">Pembelian</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
     <section class="section">
-      <div class="row">
-        <div class="col-lg-12">
-
-          <div class="card">
-            <div class="card-body">
-              <a href="{{ route('tbeli')}}" class="btn btn-primary mt-3">Tambah Pembelian</a>
-              <!-- Table with stripped rows -->
-              <table class="table datatable">
-                <thead>
-                  <tr>
-                    <th>
-                      <b>N</b>ame
-                    </th>
-                    <th>Jumlah</th>
-                    <th>Satuan</th>
-                    <th>City</th>
-                    <th>Completion</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @foreach($beli as $data)
-                  <tr>
-            <td>{{$data->nama_barang}}</td>
-            <td style="border: 1px solid black; padding: 5px;">
-            <img src="{{ asset('Foto Beli/'. $data->foto_pembelian) }}" width="200" height="150" alt="Foto Ruang" style="display: block;">
-            </td>
-            <td>{{$data->jumlah}}</td>
-            <td>{{$data->satuan}}</td>
-                    <td>
-                      <a href=""><i class="bi bi-pencil-square"></i>Edit</a>
-                      <form action="/beli-hapus" method="POST" style="display: inline;">
-                        @csrf
-                        @method('DELETE') <!-- Tambahkan ini untuk menyesuaikan metode dengan rute DELETE -->
-                        <input type="hidden" name="id_pembelian" value="{{ $data->id_pembelian }}">
-                        <button type="submit" onclick="return confirm('Apakah Anda yakin ingin menghapus semua data?')">
-                        <i class="bi bi-trash3"></i>Hapus
-                        </button>
-                    </form>
-            </td>
-                  </tr>
-                  @endforeach
-                </tbody>
-              </table>
-              <!-- End Table with stripped rows -->
-
-            </div>
-          </div>
-
-        </div>
+      @if (@session('success'))
+      <div id="alert" class="alert alert-success" onclick="this.style.display='none'">
+          {{Session::get('success')}}
       </div>
+  @endif 
+    <div class="row">
+            <div class="col-lg-12 mb-3">
+            <a href="{{ route('tbeli')}}" class="btn btn-primary mt-3"><i class="bi bi-plus-circle"></i> Pembelian</a>
+              <a href="{{ route('beliprint')}}" class="btn btn-success  mt-3"> <i class="bi bi-printer"></i> Print</a>
+              <input type="text" class="form-control mt-3" id="searchInput" placeholder="Cari...">
+            </div>
+        </div>
+        <div class="mb-3">
+              
+              <div id="noDataFound" style="display: none;">
+                <center>
+                  <h1><b>DATA KADADA</b></h1>
+                </center>
+              </div>
+            </div>     
+              <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4">
+    @foreach($beli as $data)
+    <div class="col mb-4">
+        <div class="card h-100">
+            <img src="{{ asset('Foto Beli/'. $data->foto_pembelian) }}" class="card-img-top" alt="Foto Pembelian">
+            <div class="card-body">
+                <h5 class="card-title">{{ $data->nama_barang }}</h5>
+                <p class="card-text">Jumlah: {{ $data->jumlah }} {{ $data->satuan }}</p>
+                <p class="card-text">{{ \Carbon\Carbon::parse($data->created_at)->isoFormat('DD MMMM YYYY') }}</p>
+                {{-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal{{$data->id_pembelian}}">
+                    Edit
+                </button>
+                <form action="/beli/hapus" method="POST" style="display: inline;">
+                    @csrf
+                    @method('DELETE')
+                    <input type="hidden" name="id_pembelian" value="{{ $data->id_pembelian }}">
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                        <i class="bi bi-trash3"></i> Hapus
+                    </button>
+                </form> --}}
+            </div>
+        </div>
+    </div>
+    @endforeach
+    <script>
+    function searchItems() {
+        // Mendapatkan nilai input dari field pencarian
+        var input = document.getElementById('searchInput').value.toUpperCase();
+        // Mendapatkan semua elemen card
+        var cards = document.getElementsByClassName('card');
+        // Mendapatkan elemen pesan "Tidak ada data yang ditemukan"
+        var noDataFound = document.getElementById('noDataFound');
+        var found = false; // Variabel untuk menunjukkan apakah data ditemukan
+
+        // Melakukan iterasi pada setiap elemen card
+        for (var i = 0; i < cards.length; i++) {
+            var title = cards[i].querySelector('.card-title').textContent.toUpperCase();
+            // Mengatur tampilan card berdasarkan pencarian
+            if (title.indexOf(input) > -1) {
+                cards[i].style.display = "";
+                found = true;
+            } else {
+                cards[i].style.display = "none";
+            }
+        }
+
+        // Menampilkan pesan "Tidak ada data yang ditemukan" jika tidak ada hasil pencarian
+        if (!found) {
+            noDataFound.style.display = "block";
+        } else {
+            noDataFound.style.display = "none";
+        }
+    }
+
+    // Mendengarkan event saat pengguna mengetikkan sesuatu di field pencarian
+    document.getElementById('searchInput').addEventListener('keyup', searchItems);
+</script>
+
+</div>
+              </div>
+            </div>
     </section>
   </main>
   
 @include('auth.footer')
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Skrip Bootstrap (Pastikan versi yang Anda gunakan sesuai dengan kode Anda) -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- Modal Edit -->
+@foreach($beli as $data)
+<div class="modal fade" id="editModal{{$data->id_pembelian}}" tabindex="-1" aria-labelledby="editModal{{$data->id_pembelian}}Label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModal{{$data->id_pembelian}}Label">Edit Pembelian {{$data->nama_barang}}</h5>
+        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="{{ route('pembelian.update', ['id' => $data->id_pembelian]) }}" enctype="multipart/form-data">
+          @csrf
+          @method('POST')
+          <input type="hidden" name="id_pembelian" value="{{$data->id_pembelian}}" id="">
+          <input type="hidden" name="google_id" value="{{ Auth::user()->google_id }}">
+          <div class="mb-3">
+            <label for="edit_nama_barang" class="form-label">Nama Barang</label>
+            <input type="text" class="form-control" id="edit_nama_barang" name="nama_barang" value="{{ $data->nama_barang }}" required>
+          </div>
+          <div class="mb-3">
+            <label for="edit_foto_pembelian" class="form-label">Foto Pembelian</label>
+            <input type="file" class="form-control" id="edit_foto_pembelian" name="foto_pembelian" accept="image/*">
+          </div>
+          <div class="mb-3">
+            <label for="edit_harga" class="form-label">Harga Satuan</label>
+            <input type="number" class="form-control" id="edit_harga" name="harga" value="{{ $data->harga }}" required>
+          </div>
+          <div class="mb-3">
+            <label for="edit_jumlah" class="form-label">Jumlah</label>
+            <input type="number" class="form-control" id="edit_jumlah" name="jumlah" value="{{ $data->jumlah }}" required>
+          </div>
+          <div class="mb-3">
+            <label for="edit_satuan" class="form-label">Satuan</label>
+            <select class="form-select" id="edit_satuan" name="satuan" required>
+              <option value="ml" {{ $data->satuan == 'ml' ? 'selected' : '' }}>ml</option>
+              <option value="gram" {{ $data->satuan == 'gram' ? 'selected' : '' }}>gram</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="edit_jenis" class="form-label">Jenis Pembelian</label>
+            <select class="form-select" id="edit_jenis" name="jenis" required>
+              <option value="alat" {{ $data->jenis == 'alat' ? 'selected' : '' }}>Alat</option>
+              <option value="bahan" {{ $data->jenis == 'bahan' ? 'selected' : '' }}>Bahan</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="edit_keterangan" class="form-label">Keterangan</label>
+            <textarea class="form-control" id="edit_keterangan" name="keterangan" rows="3">{{ $data->keterangan }}</textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+@endforeach
 
 </body>
 
