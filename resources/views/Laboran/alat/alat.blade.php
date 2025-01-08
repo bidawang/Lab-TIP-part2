@@ -47,8 +47,6 @@
             @if (session('level') != 'Mahasiswa')
                 <a href="{{ route('talat') }}" class="btn btn-primary mt-3"><i class="bi bi-plus-circle"></i>
 Alat</a>
-                <a href="{{ route('alat.bmn') }}" class="btn btn-primary mt-3"><i class="bi bi-plus-circle"></i>
-Alat Bmn</a>
             @endif
             @if (is_null(session('NIM')) || is_null(session('semester')) || is_null(session('no_hp')))
     <h4 class="breadcum-item">Silahkan lengkapi profil anda terlebih dahulu</h4>

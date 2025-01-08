@@ -91,13 +91,15 @@ public function insert(Request $request)
             break;
     }
 
+    $validasidata['jumlah'] = $jumlah;
+$validasidata['satuan'] = $satuan;
     // Simpan file foto pembelian dengan nama unik
     $gambar = $request->file('foto_pembelian');
     $namaFile = uniqid() . '.' . $gambar->getClientOriginalExtension();
     $validasidata['foto_pembelian'] = $namaFile;
 
     // Buat entri baru dalam tabel mdlbeli
-    $pembelian = mdlbeli::create($validasidata);
+    mdlbeli::create($validasidata);
 
     // Handle penambahan stok berdasarkan jenis barang (bahan atau alat)
     if ($validasidata['jenis'] == 'bahan') {
