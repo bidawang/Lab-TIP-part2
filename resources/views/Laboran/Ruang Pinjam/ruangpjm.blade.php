@@ -95,8 +95,7 @@
                 <div class="card">
                     <div class="card-body">
                             <!-- Button Kembali di kiri -->
-                            <a href="{{ route('ruang') }}" class="btn btn-danger mb-2">
-                                <i class="bi bi-arrow-left-circle"></i> Kembali
+                            <a href="{{ route('ruang') }}" class="btn btn-danger mt-3 mb-3"><i class="bi bi-arrow-left-circle"></i> Kembali
                             </a>
                             <div class="col-12">
                                 <a href="{{ route('truangpjm') }}" class="btn btn-info">

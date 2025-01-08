@@ -22,7 +22,6 @@ class ruangpjmctrl extends Controller
     public function insert(Request $request) {
         $validasidata = $request->validate([
             'keperluan'=> 'required',
-            'nama_peminjam'=> 'required',
             'tanggal_peminjaman'=> 'required',
             'jam_mulai'=> 'required',
             'jam_selesai'=> 'required',
@@ -32,7 +31,9 @@ class ruangpjmctrl extends Controller
             'nama_ruangan'=> 'required',
             'tipe_peminjaman'=> 'required',
         ]);
-    mdlruangpjm::create($validasidata);
+        $validasidata['created_by'] = $request->google_id;
+        
+            mdlruangpjm::create($validasidata);
 
     return redirect()->route('ruangpjm')->with('message', 'Surat Berhasil Ditambahkan');
 
@@ -48,7 +49,7 @@ public function update(Request $request){
     }
 
     $validasidata = $request->validate([
-                'keperluan'=> 'required',
+            'keperluan'=> 'required',
             'nama_peminjam'=> 'required',
             'tanggal_peminjaman'=> 'required',
             'jam_mulai'=> 'required',

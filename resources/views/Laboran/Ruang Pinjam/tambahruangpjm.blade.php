@@ -34,9 +34,9 @@
                 <form class="row g-3" method="post" action="/ruangpjm/insert" enctype="multipart/form-data">
                     @csrf 
                     
-                    <input type="hidden" name="nama_peminjam" value="{{ $formattedName }}">
                     <input type="hidden" name="status" value="tunggu">
                     <input type="hidden" name="google_id" value="{{ Auth::user()->google_id }}">
+
 
                     <div class=" col-6">
                         <div class="form-floating mb-0">

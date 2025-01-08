@@ -75,6 +75,18 @@ Route::prefix('alat')->group(function () {
     Route::get('/get-alat-satuan/{nama_alat}', [alatctrl::class, 'getSatuan']);
 });
 
+// Grouped routes for Alat Rusak
+Route::prefix('alat')->group(function () {
+    Route::post('/rusak', [alatrskctrl::class, 'insert'])->name('alat/rusak');
+    Route::post('/bmn/rusak', [alatrskctrl::class, 'insertbmn'])->name('bmn.ucak');
+    Route::post('/baik', [alatrskctrl::class, 'upbaik'])->name('alat/baik');
+    Route::get('/ucak', [alatrskctrl::class, 'index'])->name('alat.ucak');
+    Route::get('/bmn', [bmnctrl::class, 'index'])->name('alat.bmn');
+    Route::post('/bmn/tambah', [bmnctrl::class, 'insert'])->name('bmn.tambah');
+    Route::get('/rusak/riwayat', [alatrskctrl::class, 'riwayat'])->name('riwayatucak');
+
+});
+
 // Grouped routes for Alat Pinjam
 Route::prefix('alatpjm')->group(function () {
     Route::get('/', [alatpjmctrl::class,"index"])->name('alatpjm');

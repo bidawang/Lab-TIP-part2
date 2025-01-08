@@ -13,7 +13,6 @@ class mdlruangpjm extends Model
 
     protected $fillable = [
         'keperluan',
-        'nama_peminjam',
         'tanggal_peminjaman',
         'jam_mulai',
         'jam_selesai',
@@ -21,6 +20,7 @@ class mdlruangpjm extends Model
         'status',
         'nama_ruangan',
         'google_id',
-        'tipe_peminjaman'
+        'tipe_peminjaman',
+        'created_by'
     ];
 }
