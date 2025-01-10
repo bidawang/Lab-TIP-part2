@@ -127,9 +127,7 @@ Route::prefix('bahanpakai')->group(function () {
 Route::prefix('beli')->group(function () {
     Route::get('/', [belictrl::class,"index"])->name('beli');
     Route::get('/print', [belictrl::class,"print"])->name('beliprint');
-    Route::get('/tbeli', function() {
-        return view('Laboran/Pembelian.tambahbeli');
-    })->name('tbeli');
+    Route::get('/tbeli', [belictrl::class,"tbeli"])->name('tbeli');
     Route::post('/insert', [belictrl::class, "insert"]);
     Route::delete('/hapus', [belictrl::class, "delete"]);
     Route::post('/update', [belictrl::class, "update"])->name("pembelian.update");

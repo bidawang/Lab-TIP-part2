@@ -37,23 +37,32 @@
                     @csrf
                     <div id="dynamic-input-container">
                         <div class="dynamic-input-row row mt-3 align-items-center">
-                            <div class="col-12 col-sm-6 d-flex align-items-center">
-                                <div class="form-floating flex-grow-1">
+                        <div class="col-12 d-flex align-items-center">
+                        <div class="form-floating flex-grow-1">
                                     <select class="form-select select2" name="nama_alat[]" required onchange="fillSatuan(this)">
                                         <option selected disabled>Pilih Alat</option>
                                         @foreach($alat as $item)
+                                        @if($item->stok > 1) <!-- Kondisi untuk menampilkan hanya data dengan stok lebih dari 1 -->
                                             <option value="{{ $item->nama_alat }}" data-stok="{{ $item->stok }}" data-satuan="{{ $item->satuan }}">{{ $item->nama_alat }}</option>
+                                        @endif
                                         @endforeach
                                     </select>
-                                </div>
+                                    </div>
+                                    <div class="col-4">
                                 <button type="button" class="btn btn-success btn-sm ms-2" onclick="addInputRow()">Tambah Alat</button>
                             </div>
-                            <div class="col-12 col-sm-6 d-flex mt-2 align-items-center">
-                                <div class="input-group">
-                                    <input type="number" class="form-control" name="jumlah[]" min="0" placeholder="Jumlah" required>
-                                    <input type="text" class="form-control" name="satuan[]" placeholder="Satuan" readonly>
-                                </div>
                             </div>
+
+                            <div class="col-12 d-flex mt-4 align-items-center">
+<div class="col-8">
+    <input type="number" class="form-control " name="jumlah[]" min="0" placeholder="Jumlah" required>
+    </div>
+    <div class="col-4">
+    <input type="text" class="form-control" name="satuan[]" placeholder="Satuan" readonly>
+    </div>
+</div>
+
+
                         </div>
                     </div>
 
@@ -110,6 +119,7 @@
 
         satuanInput.value = satuan;
         jumlahInput.setAttribute('max', stok);  // Update max attribute
+        jumlahInput.setAttribute('placeholder', 'Max: ' + stok); // Dynamic placeholder
     }
 
     var dynamicInputIndex = 0;
@@ -119,24 +129,32 @@
 
         var template = `
             <div class="dynamic-input-row row mt-3 align-items-center" id="dynamic-input-row-${dynamicInputIndex}">
-                <div class="col-12 col-sm-6 d-flex align-items-center">
+                        <div class="col-12 d-flex align-items-center">
                     <div class="form-floating flex-grow-1">
                         <select class="form-select select2" name="nama_alat[]" required onchange="fillSatuan(this)">
                             <option selected disabled>Pilih Alat</option>
                             @foreach($alat as $item)
+                                        @if($item->stok > 1) <!-- Kondisi untuk menampilkan hanya data dengan stok lebih dari 1 -->
                                 <option value="{{ $item->nama_alat }}" data-stok="{{ $item->stok }}" data-satuan="{{ $item->satuan }}">{{ $item->nama_alat }}</option>
-                            @endforeach
+                            @endif
+                                @endforeach
                         </select>
                     </div>
+                    <div class="col-4">
                     <button type="button" class="btn btn-danger btn-sm ms-2" onclick="removeInputRow(${dynamicInputIndex})">Hapus Baris</button>
-                </div>
-                <div class="col-12 col-sm-6 d-flex mt-2 align-items-center">
-                    <div class="input-group">
-                        <input type="number" class="form-control" name="jumlah[]" min="0" placeholder="Jumlah" required>
-                        <input type="text" class="form-control" name="satuan[]" placeholder="Satuan" readonly>
+                </div></div>
+                <div class="col-12 d-flex mt-4 align-items-center">
+<div class="col-8">
+    <input type="number" class="form-control " name="jumlah[]" min="0" placeholder="Jumlah" required>
+    </div>
+    <div class="col-4">
+    <input type="text" class="form-control" name="satuan[]" placeholder="Satuan" readonly>
+    </div>
+</div>
+
+
+                        </div>
                     </div>
-                </div>
-            </div>
         `;
 
         var container = document.getElementById('dynamic-input-container');

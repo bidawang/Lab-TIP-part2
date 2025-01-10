@@ -84,33 +84,45 @@
 
             <div id="cardContainer">
                 <div class="row">
-                    @foreach ($bahan as $data)
-                        <div class="col-md-3 mb-4 filtered-item">
-                            <div class="card custom-border h-100">
-                                <img src="{{ asset('Foto Bahan/' . $data->foto_bahan) }}" class="card-img-top"
-                                    alt="Foto Bahan">
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ $data->nama_bahan }}</h5>
-                                    <p class="card-text">Jumlah: {{ $data->stok }} {{ $data->satuan }}</p>
-                                    @if (session('level') != 'Mahasiswa')
-                                        <button type="button" class="btn btn-primary" data-toggle="modal"
-                                            data-target="#editModal{{ $data->id_bahan }}"> <i
-                                                class="bi bi-pencil-square"></i> Edit
-                                        </button>
-                                        <form action="/bahan/hapus" method="POST" style="display: inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <input type="hidden" name="id_bahan" value="{{ $data->id_bahan }}">
-                                            <button type="submit" class="btn btn-danger"
-                                                onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
-                                                <i class="bi bi-trash3"></i> Hapus
-                                            </button>
-                                        </form>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
+                @foreach ($bahan as $data)
+    @if (session('level') == 'Mahasiswa' && $data->stok > 1)
+        <!-- Hanya ditampilkan untuk mahasiswa jika stok lebih dari 1 -->
+        <div class="col-md-3 mb-4 filtered-item">
+            <div class="card custom-border h-100">
+                <img src="{{ asset('Foto Bahan/' . $data->foto_bahan) }}" class="card-img-top" alt="Foto Bahan">
+                <div class="card-body">
+                    <h5 class="card-title">{{ $data->nama_bahan }}</h5>
+                    <p class="card-text">Jumlah: {{ $data->stok }} {{ $data->satuan }}</p>
+                </div>
+            </div>
+        </div>
+    @elseif (session('level') != 'Mahasiswa')
+        <!-- Ditampilkan untuk level selain mahasiswa jika stok lebih dari 1 -->
+        <div class="col-md-3 mb-4 filtered-item">
+            <div class="card custom-border h-100">
+                <img src="{{ asset('Foto Bahan/' . $data->foto_bahan) }}" class="card-img-top" alt="Foto Bahan">
+                <div class="card-body">
+                    <h5 class="card-title">{{ $data->nama_bahan }}</h5>
+                    <p class="card-text">Jumlah: {{ $data->stok }} {{ $data->satuan }}</p>
+                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                        data-target="#editModal{{ $data->id_bahan }}">
+                        <i class="bi bi-pencil-square"></i> Edit
+                    </button>
+                    <form action="/bahan/hapus" method="POST" style="display: inline;">
+                        @csrf
+                        @method('DELETE')
+                        <input type="hidden" name="id_bahan" value="{{ $data->id_bahan }}">
+                        <button type="submit" class="btn btn-danger"
+                            onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                            <i class="bi bi-trash3"></i> Hapus
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endif
+@endforeach
+
                 </div>
             </div>
 
@@ -156,9 +168,6 @@
     </main>
 
     @include('auth.footer')
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     @foreach ($bahan as $data)
         <div class="modal fade" id="editModal{{ $data->id_bahan }}" tabindex="-1"

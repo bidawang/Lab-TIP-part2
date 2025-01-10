@@ -38,6 +38,8 @@
   .custom-border {
     border: 1px solid #000; /* Thicker and darker border */
   }
+
 </style>
+
 </head>
 <body>

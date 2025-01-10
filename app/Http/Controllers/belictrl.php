@@ -15,6 +15,13 @@ class belictrl extends Controller
         return view('Laboran/Pembelian.beli', ['beli' => $beli]);
     }
 
+    public function tbeli(){
+        $bahan = mdlbahan::all();
+        $alat = mdlalat::all();
+        return view('Laboran/Pembelian.tambahbeli', compact('bahan', 'alat'));
+    }
+    
+
     public function print(){
         $endDate = Carbon::now()->toDateString();
         $startDate = Carbon::now()->subDays(30)->toDateString();

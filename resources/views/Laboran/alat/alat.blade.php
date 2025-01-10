@@ -65,36 +65,47 @@ Alat</a>
             </div>
         </div>
         <div class="row mt-3" id="cardContainer">
-            @foreach($alat as $data)
-    <div class="col-md-3 mb-4 filtered-item" style="display: block;">
-        <div class="card custom-border h-100">
-            <img src="{{ asset('Foto Alat/' . $data->foto_alat) }}" class="card-img-top"  alt="Foto Alat">
-            <div class="card-body">
-                <h5 class="card-title">{{ $data->nama_alat }}</h5>
-                <p class="card-text">Jumlah: {{ $data->stok }} {{ $data->satuan }}</p>
-                @if (session('level') != 'Mahasiswa')
-                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#rustak{{$data->id_alat}}">
-                  <i class="bi bi-exclamation-triangle"></i> Rusak
-                </button>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal{{$data->id_alat}}">
-                  <i class="bi bi-pencil-square"></i> Edit
-                </button>
-                <form action="/alat/hapus" method="POST" style="display: inline;">
-                    @csrf
-                    @method('DELETE')
-                    <input type="hidden" name="id_alat" value="{{ $data->id_alat }}">
-                    <button type="submit" class="btn btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
-                        <i class="bi bi-trash3"></i> Hapus
-                    </button>
-                </form>
-                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#detailalat{{$data->id_alat}}">
-                  <i class="bi bi-info-circle"></i> Detail
-                </button>
-                @endif
+        @foreach($alat as $data)
+    @if (session('level') == 'Mahasiswa' && $data->stok > 1)
+        <div class="col-md-3 mb-4 filtered-item" style="display: block;">
+            <div class="card custom-border h-100">
+                <img src="{{ asset('Foto Alat/' . $data->foto_alat) }}" class="card-img-top" alt="Foto Alat">
+                <div class="card-body">
+                    <h5 class="card-title">{{ $data->nama_alat }}</h5>
+                    <p class="card-text">Jumlah: {{ $data->stok }} {{ $data->satuan }}</p>
+                </div>
             </div>
         </div>
-    </div>
+    @elseif (session('level') != 'Mahasiswa')
+        <div class="col-md-3 mb-4 filtered-item" style="display: block;">
+            <div class="card custom-border h-100">
+                <img src="{{ asset('Foto Alat/' . $data->foto_alat) }}" class="card-img-top" alt="Foto Alat">
+                <div class="card-body">
+                    <h5 class="card-title">{{ $data->nama_alat }}</h5>
+                    <p class="card-text">Jumlah: {{ $data->stok }} {{ $data->satuan }}</p>
+                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#rustak{{$data->id_alat}}">
+                        <i class="bi bi-exclamation-triangle"></i> Rusak
+                    </button>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal{{$data->id_alat}}">
+                        <i class="bi bi-pencil-square"></i> Edit
+                    </button>
+                    <form action="/alat/hapus" method="POST" style="display: inline;">
+                        @csrf
+                        @method('DELETE')
+                        <input type="hidden" name="id_alat" value="{{ $data->id_alat }}">
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                            <i class="bi bi-trash3"></i> Hapus
+                        </button>
+                    </form>
+                    <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#detailalat{{$data->id_alat}}">
+                        <i class="bi bi-info-circle"></i> Detail
+                    </button>
+                </div>
+            </div>
+        </div>
+    @endif
 @endforeach
+
 
 
 
