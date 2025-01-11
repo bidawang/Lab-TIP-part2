@@ -1,17 +1,4 @@
 @include('auth.header')
-<style>
-    .card-img-top {
-        height: 250px;
-        /* Fixed height for all images */
-        object-fit: cover;
-        /* Ensure images cover the space while maintaining aspect ratio */
-    }
-
-    .custom-border {
-        border: 1px solid #000;
-        /* Thicker and darker border */
-    }
-</style>
 @php
     $email = Auth::user()->email;
     $nameParts = explode('@', $email);
@@ -32,7 +19,7 @@
                 </ol>
             </nav>
         </div>
-        <!-- End Page Title -->
+
         <section class="section">
             @if (@session('success'))
                 <div id="alert" class="alert alert-success" onclick="this.style.display='none'">
@@ -49,6 +36,7 @@
                     {{ Session::get('warning') }}
                 </div>
             @endif
+
             <div class="row">
                 <div class="col-lg-12 mb-3">
                     @if (session('level') != 'Mahasiswa')
@@ -57,13 +45,12 @@
                     @endif
 
                     @if (is_null(session('NIM')) || is_null(session('semester')) || is_null(session('no_hp')))
-                    <h4 class="breadcum-item">Silahkan lengkapi profil anda terlebih dahulu</h4>
+                        <h4 class="breadcum-item">Silahkan lengkapi profil anda terlebih dahulu</h4>
                     @else
-                    <a href="{{ route('bahan_pakai') }}" class="btn btn-info text-muted mt-3"><i
+                        <a href="{{ route('bahan_pakai') }}" class="btn btn-info text-muted mt-3"><i
                                 class="bi bi-file-earmark-plus-fill"></i> Pakai Bahan</a>
-
                     @endif
-                    <input type="text" id="searchInput" onkeyup="filterCards('searchInput', 'cardContainer')"
+                    <input type="text" id="searchInput" onkeyup="filterTable('searchInput', 'bahanTable')"
                         class="form-control mt-3" placeholder="Cari...">
                 </div>
             </div>
@@ -82,92 +69,118 @@
                 </div>
             </div>
 
-            <div id="cardContainer">
-                <div class="row">
-                @foreach ($bahan as $data)
-    @if (session('level') == 'Mahasiswa' && $data->stok > 1)
-        <!-- Hanya ditampilkan untuk mahasiswa jika stok lebih dari 1 -->
-        <div class="col-md-3 mb-4 filtered-item">
-            <div class="card custom-border h-100">
-                <img src="{{ asset('Foto Bahan/' . $data->foto_bahan) }}" class="card-img-top" alt="Foto Bahan">
-                <div class="card-body">
-                    <h5 class="card-title">{{ $data->nama_bahan }}</h5>
-                    <p class="card-text">Jumlah: {{ $data->stok }} {{ $data->satuan }}</p>
-                </div>
-            </div>
-        </div>
-    @elseif (session('level') != 'Mahasiswa')
-        <!-- Ditampilkan untuk level selain mahasiswa jika stok lebih dari 1 -->
-        <div class="col-md-3 mb-4 filtered-item">
-            <div class="card custom-border h-100">
-                <img src="{{ asset('Foto Bahan/' . $data->foto_bahan) }}" class="card-img-top" alt="Foto Bahan">
-                <div class="card-body">
-                    <h5 class="card-title">{{ $data->nama_bahan }}</h5>
-                    <p class="card-text">Jumlah: {{ $data->stok }} {{ $data->satuan }}</p>
-                    <button type="button" class="btn btn-primary" data-toggle="modal"
-                        data-target="#editModal{{ $data->id_bahan }}">
-                        <i class="bi bi-pencil-square"></i> Edit
-                    </button>
-                    <form action="/bahan/hapus" method="POST" style="display: inline;">
-                        @csrf
-                        @method('DELETE')
-                        <input type="hidden" name="id_bahan" value="{{ $data->id_bahan }}">
-                        <button type="submit" class="btn btn-danger"
-                            onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
-                            <i class="bi bi-trash3"></i> Hapus
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    @endif
-@endforeach
-
-                </div>
-            </div>
+            <!-- Tabel Data -->
+            <table id="bahanTable" class="table table-bordered table-sm small align-middle text-center custom-border">
+                <thead>
+                    <tr>
+                        <th>Foto</th>
+                        <th>Bahan</th>
+                        <th>Jumlah</th>
+                        <th>Action</th>
+                    </tr>
+                </thead> 
+                <tbody>
+                    @foreach ($bahan as $data)
+                        <tr class="filtered-item">
+                            <td><img src="{{ asset('Foto Bahan/' . $data->foto_bahan) }}" alt="Foto Bahan"
+                                    class="img-fluid" style="max-width: 80px; height: auto;"></td>
+                            <td class="small">{{ $data->nama_bahan }}</td>
+                            <td class="small">{{ $data->stok }} {{ $data->satuan }}</td>
+                            <td>
+                                @if (session('level') != 'Mahasiswa')
+                                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                                        data-target="#editModal{{ $data->id_bahan }}">
+                                        <i class="bi bi-pencil-square"></i> Edit
+                                    </button>
+                                    <form action="/bahan/hapus" method="POST" style="display: inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <input type="hidden" name="id_bahan" value="{{ $data->id_bahan }}">
+                                        <button type="submit" class="btn btn-danger btn-sm"
+                                            onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                                            <i class="bi bi-trash3"></i> Hapus
+                                        </button>
+                                    </form>
+                                @endif
+                                <!-- Button Detail -->
+                                <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
+                                    data-target="#detailModal{{ $data->id_bahan }}">
+                                    <i class="bi bi-eye"></i> Detail
+                                </button>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
 
             <script>
-                function filterCards(inputId, containerId) {
-                    var input, filter, cards, cardContainer, title, noDataFound;
+                function filterTable(inputId, tableId) {
+                    var input, filter, table, tr, td, i, j, txtValue;
                     input = document.getElementById(inputId);
                     filter = input.value.toUpperCase();
-                    cardContainer = document.getElementById(containerId);
-                    cards = cardContainer.getElementsByClassName('filtered-item');
-                    noDataFound = document.getElementById('noDataFound');
+                    table = document.getElementById(tableId);
+                    tr = table.getElementsByTagName("tr");
                     var found = false;
 
-                    for (var i = 0; i < cards.length; i++) {
-                        title = cards[i].querySelector('.card-title').textContent.toUpperCase();
-                        if (title.indexOf(filter) > -1) {
-                            cards[i].style.display = "block";
-                            found = true;
-                        } else {
-                            cards[i].style.display = "none";
+                    for (i = 1; i < tr.length; i++) {
+                        td = tr[i].getElementsByTagName("td");
+                        for (j = 1; j < td.length - 1; j++) { // Exclude action column for search
+                            if (td[j]) {
+                                txtValue = td[j].textContent || td[j].innerText;
+                                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                                    tr[i].style.display = "";
+                                    found = true;
+                                    break;
+                                } else {
+                                    tr[i].style.display = "none";
+                                }
+                            }
                         }
                     }
 
                     if (!found) {
-                        noDataFound.style.display = "block";
+                        document.getElementById('noDataFound').style.display = "block";
                     } else {
-                        noDataFound.style.display = "none";
+                        document.getElementById('noDataFound').style.display = "none";
                     }
 
-                    // Jika input pencarian kosong, tampilkan semua item
                     if (filter === '') {
-                        Array.prototype.forEach.call(cards, function(card) {
-                            card.style.display = "block";
+                        Array.prototype.forEach.call(tr, function(row) {
+                            row.style.display = "";
                         });
-                        noDataFound.style.display = "none";
+                        document.getElementById('noDataFound').style.display = "none";
                     }
                 }
             </script>
-
         </section>
-
-
     </main>
 
     @include('auth.footer')
+
+    <!-- Modal Detail -->
+    @foreach ($bahan as $data)
+        <div class="modal fade" id="detailModal{{ $data->id_bahan }}" tabindex="-1"
+            aria-labelledby="detailModal{{ $data->id_bahan }}Label" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="detailModal{{ $data->id_bahan }}Label">Detail Bahan
+                            {{ $data->nama_bahan }}</h5>
+                        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="text-center">
+                            <img src="{{ asset('Foto Bahan/' . $data->foto_bahan) }}" alt="Foto Bahan"
+                                class="img-fluid mb-3" style="max-width: 200px;">
+                        </div>
+                        <p><strong>Nama Bahan:</strong> <span class="small">{{ $data->nama_bahan }}</span></p>
+                        <p><strong>Jumlah:</strong> <span class="small">{{ $data->stok }} {{ $data->satuan }}</span></p>
+                        <p><strong>Keterangan:</strong> <span class="small">{{ $data->keterangan }}</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
 
     @foreach ($bahan as $data)
         <div class="modal fade" id="editModal{{ $data->id_bahan }}" tabindex="-1"
@@ -184,7 +197,7 @@
                             enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
-                            <input type="hidden" name="id_bahan" value="{{ $data->id_bahan }}" id="">
+                            <input type="hidden" name="id_bahan" value="{{ $data->id_bahan }}">
                             <input type="hidden" name="google_id" value="{{ Auth::user()->google_id }}">
                             <div class="mb-3">
                                 <label for="edit_nama_bahan" class="form-label">Nama Bahan</label>
@@ -222,14 +235,12 @@
                                 <label for="edit_keterangan" class="form-label">Keterangan</label>
                                 <textarea class="form-control" id="edit_keterangan" name="keterangan" rows="3">{{ $data->keterangan }}</textarea>
                             </div>
-                            <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                            <button type="submit" class="btn btn-primary btn-sm">Simpan Perubahan</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     @endforeach
-
 </body>
-
 </html>
