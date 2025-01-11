@@ -65,14 +65,8 @@
     </style>
 </head>
 @php
-    // Mendapatkan alamat email pengguna yang sedang masuk
-    $email = Auth::user()->email;
-    
-    // Memisahkan bagian nama dari alamat email
-    $nameParts = explode('@', $email);
-    
-    // Mengonversi format nama: mengubah huruf pertama dari setiap kata menjadi huruf besar
-    $formattedName = ucwords(str_replace('.', ' ', $nameParts[0]));
+    // Mengelompokkan data berdasarkan kode_alat_pinjam
+    $groupedData = $alat->groupBy('kode_alat_pinjam');
 @endphp
 
 <body>
@@ -108,32 +102,47 @@
                             <a href="{{ route('talatpjm') }}" class="btn btn-info mt-3"><i class="bi bi-plus-circle"></i> Pinjam Alat</a>
                             <a href="{{ route('printalatpjm') }}" class="btn btn-success mt-3"><i class="bi bi-printer"></i> Print</a>
 
-                        <!-- Table with stripped rows -->
-                        <div id="printableArea" class="table-responsive">
-                            <table class="table datatable">
-                                <thead>
-                                    <tr>
-                                        <th><b>N</b>ama</th>
-                                        <th>Alat</th>
-                                        <th>Jumlah</th>
-                                        <th>Tanggal</th>
-                                        <th>Waktu</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($alat as $data)
-                                    <tr>
-                                        <td>{{ $data->nama_peminjam }}</td>
-                                        <td>{{ $data->nama_alat }}</td>
-                                        <td>{{ $data->jumlah }} {{ $data->satuan }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($data->tanggal_peminjaman)->isoFormat('DD MMMM YYYY') }}</td>
-                                        <td>{{ $data->status }}</td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                        <!-- Accordion for grouped data -->
+                        <div class="accordion mt-3" id="faqAccordion">
+                            @foreach($groupedData as $kode_alat => $group)
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="heading{{ $kode_alat }}">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $kode_alat }}" aria-expanded="true" aria-controls="collapse{{ $kode_alat }}">
+                                            <div class="d-flex justify-content-between w-100">
+                                                <span>{{ $kode_alat }} ({{ count($group) }} Data)</span>
+                                            </div>
+                                        </button>
+                                    </h2>
+                                    <div id="collapse{{ $kode_alat }}" class="accordion-collapse collapse" aria-labelledby="heading{{ $kode_alat }}" data-bs-parent="#faqAccordion">
+                                        <div class="accordion-body">
+                                            <table class="table datatable">
+                                                <thead>
+                                                    <tr>
+                                                        <th><b>N</b>ama</th>
+                                                        <th>Alat</th>
+                                                        <th>Jumlah</th>
+                                                        <th>Tanggal</th>
+                                                        <th>Waktu</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach($group as $data)
+                                                        <tr>
+                                                            <td>{{ $data->nama_peminjam }}</td>
+                                                            <td>{{ $data->nama_alat }}</td>
+                                                            <td>{{ $data->jumlah }} {{ $data->satuan }}</td>
+                                                            <td>{{ \Carbon\Carbon::parse($data->tanggal_peminjaman)->isoFormat('DD MMMM YYYY') }}</td>
+                                                            <td>{{ $data->status }}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
-                        <!-- End Table with stripped rows -->
+                        <!-- End Accordion for grouped data -->
 
                     </div>
                 </div>

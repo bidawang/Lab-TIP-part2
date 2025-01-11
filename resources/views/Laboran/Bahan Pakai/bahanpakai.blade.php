@@ -68,14 +68,8 @@
 </head>
 
 @php
-    // Get the email address of the currently logged-in user
-    $email = Auth::user()->email;
-
-    // Split the email to get the username part
-    $nameParts = explode('@', $email);
-
-    // Format the username: capitalize the first letter of each word
-    $formattedName = ucwords(str_replace('.', ' ', $nameParts[0]));
+    // Mengelompokkan data berdasarkan kode_bahan_pakai
+    $groupedData = $bahan_pakai->groupBy('kode_bahan_pakai');
 @endphp
 
 <body>
@@ -106,34 +100,49 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                                <a href="{{ route('bahan') }}" class="btn btn-danger mt-3"><i class="bi bi-arrow-left-circle"></i> Kembali</a>
-                                  <a href="{{ route('tambah_pemakaian') }}" class="btn btn-info mt-3"><i class="bi bi-plus-circle"></i> Tambah Pemakaian</a>
-                            <!-- Table with stripped rows -->
-                            <div id="printableArea" class="table-responsive">
-                                <table class="table datatable">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Nama Bahan</th>
-                                            <th>Jumlah</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($bahan_pakai as $data)
-                                            @if($data->google_id == Auth::user()->google_id)
-                                                <tr>
-                                                    <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $data->nama_bahan }}</td>
-                                                    <td>{{ $data->jumlah }} {{ $data->satuan }}</td>
-                                                    <td>{{ $data->status }}</td>
-                                                </tr>
-                                            @endif
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                            <a href="{{ route('bahan') }}" class="btn btn-danger mt-3"><i class="bi bi-arrow-left-circle"></i> Kembali</a>
+                            <a href="{{ route('tambah_pemakaian') }}" class="btn btn-info mt-3"><i class="bi bi-plus-circle"></i> Tambah Pemakaian</a>
+                            <!-- Accordion for grouped data -->
+                            <div class="accordion mt-3" id="faqAccordion">
+                                @foreach($groupedData as $kode_bahan => $group)
+                                    <div class="accordion-item mt-2">
+                                        <h2 class="accordion-header" id="heading{{ $kode_bahan }}">
+                                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $kode_bahan }}" aria-expanded="true" aria-controls="collapse{{ $kode_bahan }}">
+                                                <div class="d-flex justify-content-between w-100">
+                                                    <span>{{ $kode_bahan }} ({{ count($group) }} Data)</span>
+                                                </div>
+                                            </button>
+                                        </h2>
+                                        <div id="collapse{{ $kode_bahan }}" class="accordion-collapse collapse" aria-labelledby="heading{{ $kode_bahan }}" data-bs-parent="#faqAccordion">
+                                            <div class="accordion-body">
+                                                <table class="table datatable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>No</th>
+                                                            <th>Nama Bahan</th>
+                                                            <th>Jumlah</th>
+                                                            <th>Status</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach($group as $data)
+                                                            @if($data->google_id == Auth::user()->google_id)
+                                                                <tr>
+                                                                    <td>{{ $loop->iteration }}</td>
+                                                                    <td>{{ $data->nama_bahan }}</td>
+                                                                    <td>{{ $data->jumlah }} {{ $data->satuan }}</td>
+                                                                    <td>{{ $data->status }}</td>
+                                                                </tr>
+                                                            @endif
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
                             </div>
-                            <!-- End Table with stripped rows -->
+                            <!-- End Accordion for grouped data -->
                         </div>
                     </div>
                 </div>

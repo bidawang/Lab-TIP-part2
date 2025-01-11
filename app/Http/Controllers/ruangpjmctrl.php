@@ -94,12 +94,20 @@ public function statusruang(Request $request){
 
 }
 
-public function print() {
-    $endDate = Carbon::now()->toDateString();
-    $startDate = Carbon::now()->subDays(30)->toDateString();
-    $ruangpjm = mdlruangpjm::whereBetween('created_at', [$startDate, $endDate])->get();
-    return view('Laboran/Ruang Pinjam.printsurat', compact('ruangpjm', 'startDate', 'endDate'));
+public function print($id)
+{
+    // Cari data berdasarkan id
+    $ruangpjm = mdlruangpjm::where('id_pinjam_ruangan', $id)->first();
+
+    // Jika data tidak ditemukan, redirect atau tampilkan pesan
+    if (!$ruangpjm) {
+        return redirect()->route('ruangpjm')->with('error', 'Data tidak ditemukan');
+    }
+
+    // Kirimkan data ke view untuk dicetak
+    return view('Laboran.Ruang Pinjam.printsurat', compact('ruangpjm'));
 }
+
 
 public function filter(Request $request) {
     $request->validate([

@@ -35,11 +35,11 @@ class heafoctrl extends Controller
         'pinjam_ruangan' => $pinjam_ruangan,
     ]);
 }
+
     public function indjammhs(Request $request)
 {
     // Mengambil google_id dari request
     $google_id = $request->input('google_id');
-
     // Inisialisasi query untuk masing-masing model
     $alat_pinjam = mdlalatpjm::where('google_id', $google_id);
     $bahan_pakai = mdlbahanuse::where('google_id', $google_id);
@@ -68,7 +68,6 @@ class heafoctrl extends Controller
         'email' => $user ? $user->email : null,
     ]);
 }
-
 
 public function indexDraft(Request $request)
 {

@@ -60,7 +60,8 @@ Route::prefix('ruangpjm')->group(function () {
     Route::post('/insert', [ruangpjmctrl::class, "insert"]);
     Route::delete('/hapus', [ruangpjmctrl::class, "delete"]);
     Route::put('/update', [ruangpjmctrl::class, "update"])->name ('ubah');
-    Route::get('/print', [ruangpjmctrl::class,"print"])->name('printruangpjm');
+    Route::get('/print/{id}', [ruangpjmctrl::class, "print"])->name('printruangpjm');
+
 });
 
 // Grouped routes for Alat

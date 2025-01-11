@@ -67,6 +67,19 @@ class bahanusectrl extends Controller
         'status' => 'required'
     ]);
 
+    // Ambil tanggal dan buat bagian kode yang statis
+    $tanggal = Carbon::parse($validatedData['tanggal_pemakaian']);
+    $hari = $tanggal->locale('id')->isoFormat('ddd'); // Mendapatkan hari dalam bahasa Indonesia
+    $tanggalHari = $tanggal->format('d'); // Tanggal dalam format dd
+    $bulanRomawi = $this->bulanRomawi($tanggal->format('m')); // Mengambil bulan dalam romawi
+    $tahunAkhir = $tanggal->format('y'); // Dua angka terakhir tahun
+
+    // Mencari urutan berdasarkan tanggal hari ini
+    $urutan = mdlbahanuse::whereDate('tanggal_pemakaian', $tanggal->toDateString())->count() + 1;
+
+    // Membuat kode bahan pakai
+    $kodeBahanPakai = 'BHN_' . ucfirst(strtolower(substr($hari, 0, 3))) . '/' . $tanggalHari . '/' . $bulanRomawi . '/' . $tahunAkhir . '/' . str_pad($urutan, 3, '0', STR_PAD_LEFT);
+
     // Loop through each nama_bahan, jumlah, and satuan
     foreach ($validatedData['nama_bahan'] as $key => $value) {
         // Find the bahan
@@ -78,6 +91,7 @@ class bahanusectrl extends Controller
 
             // Create a new instance of mdlbahanuse for each set of data
             mdlbahanuse::create([
+                'kode_bahan_pakai' => $kodeBahanPakai, // Add kode_bahan_pakai here
                 'nama_bahan' => $validatedData['nama_bahan'][$key],
                 'jumlah' => $validatedData['jumlah'][$key],
                 'satuan' => $validatedData['satuan'][$key],
@@ -94,6 +108,28 @@ class bahanusectrl extends Controller
 
     return redirect()->route('bahan_pakai')->with('success', 'Data Berhasil Ditambahkan');
 }
+
+// Fungsi untuk mengubah bulan dalam angka ke bulan Romawi
+private function bulanRomawi($bulan)
+{
+    $bulanRomawi = [
+        '01' => 'I',
+        '02' => 'II',
+        '03' => 'III',
+        '04' => 'IV',
+        '05' => 'V',
+        '06' => 'VI',
+        '07' => 'VII',
+        '08' => 'VIII',
+        '09' => 'IX',
+        '10' => 'X',
+        '11' => 'XI',
+        '12' => 'XII',
+    ];
+
+    return $bulanRomawi[$bulan];
+}
+
 
 
     public function delete(Request $request){

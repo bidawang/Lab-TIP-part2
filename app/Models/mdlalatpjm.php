@@ -20,7 +20,8 @@ class mdlalatpjm extends Model
         'tanggal_kembali',
         'keperluan',
         'google_id',
-        'status'
+        'status',
+        'kode_alat_pinjam'
     ];
     // protected $casts = [
     //     'waktu_mulai' => 'datetime',

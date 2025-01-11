@@ -18,7 +18,8 @@ class mdlbahanuse extends Model
         'nama_pemakai',
         'tanggal_pemakaian',
         'google_id',
-        'status'
+        'status',
+        'kode_bahan_pakai'
     ];
     public function bahan()
 {

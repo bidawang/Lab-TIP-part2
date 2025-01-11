@@ -104,35 +104,46 @@
                                 {{-- <a href="javascript:void(0);" onclick="printTable();" class="btn btn-success">
                                     <i class="bi bi-printer"></i> Print Riwayat Peminjaman
                                 </a> --}}
-                                <!-- <a href="{{ route('printruangpjm')}}" class="btn btn-success">
-                                    <i class="bi bi-printer"></i> Print Perizinan
-                                </a> -->
+                                
                             </div>
                         <!-- Table with stripped rows -->
                         <div id="printableArea" class="table-responsive">
                             <table class="table datatable">
-                                <thead>
-                                    <tr>
-                                        <th>Ruangan</th>
-                                        <th>Pembuatan Surat</th>
-                                        <th>Tanggal Peminjaman</th>
-                                        <th>Waktu</th>
-                                        <th>Keperluan</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($ruang_pinjam as $data)
-                                        @if($data->google_id == auth::user()->google_id)
-                                            <tr>
-                                                <td>{{ $data->nama_ruangan }}</td>
-                                                <td>{{ \Carbon\Carbon::parse($data->created_at)->format('d F Y') }}</td>
-                                                <td>{{ \Carbon\Carbon::parse($data->tanggal_peminjaman)->format('d F Y') }}</td>
-                                                <td>{{ \Carbon\Carbon::parse($data->jam_mulai)->format('H.i') }} - {{ \Carbon\Carbon::parse($data->jam_selesai)->format('H.i') }}</td>
-                                                <td>{{ $data->keperluan }}</td>
-                                            </tr>
-                                        @endif
-                                    @endforeach
-                                </tbody>
+                            <thead>
+    <tr>
+        <th>Ruangan</th>
+        <th>Pembuatan Surat</th>
+        <th>Tanggal Peminjaman</th>
+        <th>Waktu</th>
+        <th>Keperluan</th>
+        <th>Status/Print</th> <!-- Kolom gabungan untuk Status dan Print -->
+    </tr>
+</thead>
+<tbody>
+    @foreach($ruang_pinjam as $data)
+        @if($data->google_id == auth::user()->google_id)
+            <tr>
+                <td>{{ $data->nama_ruangan }}</td>
+                <td>{{ \Carbon\Carbon::parse($data->created_at)->format('d F Y') }}</td>
+                <td>{{ \Carbon\Carbon::parse($data->tanggal_peminjaman)->format('d F Y') }}</td>
+                <td>{{ \Carbon\Carbon::parse($data->jam_mulai)->format('H.i') }} - {{ \Carbon\Carbon::parse($data->jam_selesai)->format('H.i') }}</td>
+                <td>{{ $data->keperluan }}</td>
+                <td>
+                    @if($data->status == 'tunggu')
+                        <span class="badge bg-warning">Tunggu</span>
+                    @elseif($data->status == 'Ditolak')
+                        <span class="badge bg-danger">Tolak</span>
+                    @elseif($data->status == 'Disetujui')
+                        <a href="{{ route('printruangpjm', ['id' => $data->id_pinjam_ruangan]) }}" class="btn btn-success btn-sm">
+                            <i class="bi bi-printer"></i> Print
+                        </a>
+                    @endif
+                </td>
+            </tr>
+        @endif
+    @endforeach
+</tbody>
+
                             </table>
                         </div>
                         <!-- End Table with stripped rows -->

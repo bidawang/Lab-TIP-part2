@@ -18,7 +18,6 @@
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item active">Home</li>
-          adsfadfhad
           <li class="breadcrumb-item active">{{$formattedName}}</li>
         </ol>
       </nav>

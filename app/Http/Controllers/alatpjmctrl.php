@@ -59,51 +59,85 @@ class alatpjmctrl extends Controller
     }
     
     
-    public function insert(Request $request){
+    public function insert(Request $request)
+{
+    $validatedData = $request->validate([
+        'nama_peminjam' => 'required',
+        'nama_alat.*' => 'required', // Membuat nama_alat menjadi array
+        'jumlah.*' => 'required', // Membuat jumlah menjadi array
+        'satuan.*' => 'required', // Membuat satuan menjadi array
+        'tempat_peminjaman' => 'required',
+        'tanggal_peminjaman' => 'required',
+        'keperluan' => 'required',
+        'google_id' => 'required',
+        'status' => 'required'
+    ]);
 
-        $validatedData = $request->validate([
-            'nama_peminjam'=>'required',
-            'nama_alat.*'=>'required', // Membuat nama_alat menjadi array
-            'jumlah.*'=>'required', // Membuat jumlah menjadi array
-            'satuan.*'=>'required', // Membuat satuan menjadi array
-            'tempat_peminjaman'=>'required',
-            'tanggal_peminjaman'=>'required',
-            'keperluan'=>'required',
-            'google_id'=>'required',
-            'status'=>'required'
-        ]);
-    
-        // Loop through each nama_alat, jumlah, dan satuan
-        foreach($validatedData['nama_alat'] as $key => $value){
-            // Find the alat
-            $alat = mdlalat::where('nama_alat', $validatedData['nama_alat'][$key])->first();
+    // Ambil tanggal dan buat bagian kode yang statis
+    $tanggal = Carbon::parse($validatedData['tanggal_peminjaman']);
+    $hari = $tanggal->locale('id')->isoFormat('ddd'); // Mendapatkan hari dalam bahasa Indonesia
+    $tanggalHari = $tanggal->format('d'); // Tanggal dalam format dd
+    $bulanRomawi = $this->bulanRomawi($tanggal->format('m')); // Mengambil bulan dalam romawi
+    $tahunAkhir = $tanggal->format('y'); // Dua angka terakhir tahun
 
-            if ($alat) {
-                // Reduce the stock of the alat
-                $alat->stok -= $validatedData['jumlah'][$key];
-                $alat->save();
-    
-                // Create a new instance of mdlalatpjm for each set of data
-                mdlalatpjm::create([
-                    'nama_peminjam' => $validatedData['nama_peminjam'],
-                    'nama_alat' => $validatedData['nama_alat'][$key],
-                    'jumlah' => $validatedData['jumlah'][$key],
-                    'satuan' => $validatedData['satuan'][$key],
-                    'tempat_peminjaman' => $validatedData['tempat_peminjaman'],
-                    'tanggal_peminjaman' => $validatedData['tanggal_peminjaman'],
-                    'keperluan' => $validatedData['keperluan'],
-                    'google_id' => $validatedData['google_id'],
-                    'status' => $validatedData['status']
-                ]);
-            }
-            
-             else {
-                return redirect()->route('alat')->with('error', 'Alat tidak ditemukan');
-            }
+    // Mencari urutan berdasarkan tanggal hari ini
+    $urutan = mdlalatpjm::whereDate('tanggal_peminjaman', $tanggal->toDateString())->count() + 1;
+
+    // Membuat kode alat pinjam
+    $kodeAlatPinjam = 'ALT_' . ucfirst(strtolower(substr($hari, 0, 3))) . '/' . $tanggalHari . '/' . $bulanRomawi . '/' . $tahunAkhir . '/' . str_pad($urutan, 3, '0', STR_PAD_LEFT);
+
+    // Loop through each nama_alat, jumlah, dan satuan
+    foreach ($validatedData['nama_alat'] as $key => $value) {
+        // Find the alat
+        $alat = mdlalat::where('nama_alat', $validatedData['nama_alat'][$key])->first();
+
+        if ($alat) {
+            // Reduce the stock of the alat
+            $alat->stok -= $validatedData['jumlah'][$key];
+            $alat->save();
+
+            // Create a new instance of mdlalatpjm for each set of data
+            mdlalatpjm::create([
+                'kode_alat_pinjam' => $kodeAlatPinjam, // Add kode_alat_pinjam here
+                'nama_peminjam' => $validatedData['nama_peminjam'],
+                'nama_alat' => $validatedData['nama_alat'][$key],
+                'jumlah' => $validatedData['jumlah'][$key],
+                'satuan' => $validatedData['satuan'][$key],
+                'tempat_peminjaman' => $validatedData['tempat_peminjaman'],
+                'tanggal_peminjaman' => $validatedData['tanggal_peminjaman'],
+                'keperluan' => $validatedData['keperluan'],
+                'google_id' => $validatedData['google_id'],
+                'status' => $validatedData['status']
+            ]);
+        } else {
+            return redirect()->route('alat')->with('error', 'Alat tidak ditemukan');
         }
-    
-        return redirect()->route('alatpjm')->with('success', 'Peminjaman Alat Berhasil Ditambahkan');
     }
+
+    return redirect()->route('alatpjm')->with('success', 'Peminjaman Alat Berhasil Ditambahkan');
+}
+
+// Fungsi untuk mengubah bulan dalam angka ke bulan Romawi
+private function bulanRomawi($bulan)
+{
+    $bulanRomawi = [
+        '01' => 'I',
+        '02' => 'II',
+        '03' => 'III',
+        '04' => 'IV',
+        '05' => 'V',
+        '06' => 'VI',
+        '07' => 'VII',
+        '08' => 'VIII',
+        '09' => 'IX',
+        '10' => 'X',
+        '11' => 'XI',
+        '12' => 'XII',
+    ];
+
+    return $bulanRomawi[$bulan];
+}
+
     
     public function delete(Request $request){
         $id = $request->input('id_alat_pinjam');
