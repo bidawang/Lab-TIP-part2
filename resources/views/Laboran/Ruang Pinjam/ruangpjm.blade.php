@@ -1,77 +1,10 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Kelola Surat</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-    <style>
-        @media print {
-            #dataTableArea {
-                display: none;
-            }
-            #printableArea {
-                display: block;
-            }
-        }
-
-        .table-responsive {
-            margin-top: 1rem;
-        }
-
-        /* Menyesuaikan tabel untuk layar kecil */
-        @media (max-width: 576px) {
-            .table-responsive {
-                font-size: 0.75rem; /* Menyesuaikan ukuran font */
-            }
-
-            .table-responsive th,
-            .table-responsive td {
-                padding: 0.3rem; /* Mengurangi padding untuk tabel pada layar kecil */
-            }
-
-            .table {
-                width: 100%; /* Memastikan tabel mengisi lebar kontainer */
-                display: block; /* Membuat tabel bisa digulirkan horizontal */
-                overflow-x: auto; /* Menambahkan scrollbar horizontal jika diperlukan */
-            }
-        }
-
-        /* Menata tombol untuk responsivitas */
-        .button-group {
-            display: flex;
-            flex-wrap: wrap; /* Memungkinkan tombol berjejer ke bawah pada layar kecil */
-            gap: 0.5rem;
-        }
-
-        .button-group .btn {
-            flex: 1;
-        }
-
-        @media (min-width: 768px) {
-            .button-group {
-                justify-content: flex-end;
-            }
-
-            .button-group .btn {
-                width: auto;
-            }
-        }
-    </style>
-</head>
-@php
-    $email = Auth::user()->email;
-    $nameParts = explode('@', $email);
-    $formattedName = ucwords(str_replace('.', ' ', $nameParts[0]));
-    use Carbon\Carbon;
-@endphp
-<body>
 @include('auth.header')
-@include('auth.headerbody')
-@include('Laboran/sidebar.side')
+<body>
+  @include('auth.headerbody')
+  @include('Laboran/sidebar.side')
 
-<main id="main" class="main">
+
+<main id="main" class="main small">
     <div class="pagetitle">
         <h1>Kelola Surat</h1>
         <nav>
@@ -94,60 +27,55 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                            <!-- Button Kembali di kiri -->
-                            <a href="{{ route('ruang') }}" class="btn btn-danger mt-3 mb-3"><i class="bi bi-arrow-left-circle"></i> Kembali
+                        <!-- Button Kembali di kiri -->
+<div class="col-12 mt-3 mb-3">
+                        <a href="{{ route('ruang') }}" class="btn btn-danger btn-sm"><i class="bi bi-arrow-left-circle"></i> Kembali
+                        </a>
+                            <a href="{{ route('truangpjm') }}" class="btn btn-sm btn-info">
+                                <i class="bi bi-plus-circle"></i> Tambah Surat
                             </a>
-                            <div class="col-12">
-                                <a href="{{ route('truangpjm') }}" class="btn btn-info">
-                                    <i class="bi bi-plus-circle"></i> Tambah Surat
-                                </a>
-                                {{-- <a href="javascript:void(0);" onclick="printTable();" class="btn btn-success">
-                                    <i class="bi bi-printer"></i> Print Riwayat Peminjaman
-                                </a> --}}
-                                
-                            </div>
+                        </div>
+
+                        <!-- Search Input -->
+                        <input id="searchInput" type="text" class="form-control search-input" placeholder="Cari Ruangan...">
+
                         <!-- Table with stripped rows -->
                         <div id="printableArea" class="table-responsive">
-                            <table class="table datatable">
-                            <thead>
-    <tr>
-        <th>Ruangan</th>
-        <th>Pembuatan Surat</th>
-        <th>Tanggal Peminjaman</th>
-        <th>Waktu</th>
-        <th>Keperluan</th>
-        <th>Status/Print</th> <!-- Kolom gabungan untuk Status dan Print -->
-    </tr>
-</thead>
-<tbody>
-    @foreach($ruang_pinjam as $data)
-        @if($data->google_id == auth::user()->google_id)
-            <tr>
-                <td>{{ $data->nama_ruangan }}</td>
-                <td>{{ \Carbon\Carbon::parse($data->created_at)->format('d F Y') }}</td>
-                <td>{{ \Carbon\Carbon::parse($data->tanggal_peminjaman)->format('d F Y') }}</td>
-                <td>{{ \Carbon\Carbon::parse($data->jam_mulai)->format('H.i') }} - {{ \Carbon\Carbon::parse($data->jam_selesai)->format('H.i') }}</td>
-                <td>{{ $data->keperluan }}</td>
-                <td>
-                    @if($data->status == 'tunggu')
-                        <span class="badge bg-warning">Tunggu</span>
-                    @elseif($data->status == 'Ditolak')
-                        <span class="badge bg-danger">Tolak</span>
-                    @elseif($data->status == 'Disetujui')
-                        <a href="{{ route('printruangpjm', ['id' => $data->id_pinjam_ruangan]) }}" class="btn btn-success btn-sm">
-                            <i class="bi bi-printer"></i> Print
-                        </a>
-                    @endif
-                </td>
-            </tr>
-        @endif
-    @endforeach
-</tbody>
-
+                            <table class="table table-sm table-bordered table-striped align-middle text-center">
+                                <thead class="small align-middle">
+                                    <tr>
+                                        <th>Ruangan</th>
+                                        <th>Pembuatan Surat</th>
+                                        <th>Action</th> <!-- Kolom gabungan untuk Status dan Print -->
+                                    </tr>
+                                </thead>
+                                <tbody class="text-center small" id="tableBody">
+                                    @foreach($ruang_pinjam as $data)
+                                        @if($data->google_id == auth::user()->google_id)
+                                            <tr>
+                                                <td>{{ $data->nama_ruangan }}</td>
+                                                <td>{{ \Carbon\Carbon::parse($data->created_at)->format('d F Y') }}</td>
+                                                <td>
+                                                    @if($data->status == 'tunggu')
+                                                        <span class="badge bg-warning">Tunggu</span>
+                                                    @elseif($data->status == 'Ditolak')
+                                                        <span class="badge bg-danger">Tolak</span>
+                                                    @elseif($data->status == 'Disetujui')
+                                                    
+                                                        <a href="{{ route('printruangpjm', ['id' => $data->id_pinjam_ruangan]) }}" class="btn btn-success btn-sm">
+                                                            <i class="bi bi-printer"></i>
+                                                        </a>
+                                                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal{{ $data->id_pinjam_ruangan }}">
+                                                            <i class="bi bi-info-circle"></i>
+                                                        </button>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endif
+                                    @endforeach
+                                </tbody>
                             </table>
                         </div>
-                        <!-- End Table with stripped rows -->
-
                     </div>
                 </div>
             </div>
@@ -157,74 +85,68 @@
 
 @include('auth.footer')
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-<script>
-function printTable() {
-    var printContents = document.getElementById('printableArea').innerHTML;
-    var originalContents = document.body.innerHTML;
-
-    document.body.innerHTML = printContents;
-    window.print();
-    document.body.innerHTML = originalContents;
-}
-</script>
-
-<!-- Modal Edit -->
+<!-- Modal Detail -->
 @foreach($ruang_pinjam as $data)
-<div class="modal fade" id="editModal{{ $data->id_ruangan }}" tabindex="-1" aria-labelledby="editModal{{ $data->id_ruangan }}Label" aria-hidden="true">
+<div class="modal fade small" id="detailModal{{ $data->id_pinjam_ruangan }}" tabindex="-1" aria-labelledby="detailModal{{ $data->id_pinjam_ruangan }}Label" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editModal{{ $data->id_ruangan }}Label">Edit Ruangan {{ $data->nama_ruangan }}</h5>
+                <h6 class="modal-title" id="detailModal{{ $data->id_pinjam_ruangan }}Label">Detail Peminjaman Ruangan</h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="{{ route('ubah', ['id' => $data->id_pinjam_ruangan]) }}" enctype="multipart/form-data">
-                    @csrf
-                    @method('PUT')
-                    <input type="hidden" name="nama_peminjam" value="{{ $formattedName }}">
-                    <input type="hidden" name="status" value="tunggu">
-                    <input type="hidden" value="{{ $data->id_pinjam_ruangan }}" name="id_pinjam_ruangan">
-
-                    <div class="mb-3">
-                        <label for="nama_ruangan" class="form-label">Nama Ruangan</label>
-                        <input type="text" id="nama_ruangan" name="nama_ruangan" value="{{ $data->nama_ruangan }}" class="form-control">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        @php
+                        // Mendapatkan alamat email pengguna yang sedang masuk
+                        $email = Auth::user()->email;
+                        // Memisahkan bagian nama dari alamat email
+                        $nameParts = explode('@', $email);
+                        // Mengonversi format nama: mengubah huruf pertama dari setiap kata menjadi huruf besar
+                        $formattedName = ucwords(str_replace('.', ' ', $nameParts[0]));
+                        @endphp
+                        <h6 class="card-title text-center mb-3">{{ $data->nama_ruangan }}</h6>
+                        <p><strong>Mata Kuliah:</strong><br>{{ $data->mata_kuliah }}</p>
+                        <p><strong>Tanggal Peminjaman:</strong><br>{{ \Carbon\Carbon::parse($data->tanggal_peminjaman)->format('d F Y') }}</p>
+                        <p><strong>Jam:</strong><br>{{ \Carbon\Carbon::parse($data->jam_mulai)->format('H:i') }} - {{ \Carbon\Carbon::parse($data->jam_selesai)->format('H:i') }}</p>
+                        <p><strong>Keperluan:</strong><br>{{ $data->keperluan }}</p>
+                        <p><strong>Status:</strong><br>
+                            @if($data->status == 'tunggu')
+                            <span class="badge bg-warning text-dark">Tunggu</span>
+                            @elseif($data->status == 'Ditolak')
+                            <span class="badge bg-danger">Tolak</span>
+                            @elseif($data->status == 'Disetujui')
+                            <span class="badge bg-success">Disetujui</span>
+                            @endif
+                        </p>
                     </div>
-
-                    <div class="mb-3">
-                        <label for="mata_kuliah" class="form-label">Mata Kuliah</label>
-                        <input type="text" id="mata_kuliah" name="mata_kuliah" value="{{ $data->mata_kuliah }}" class="form-control">
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="tanggal_peminjaman" class="form-label">Tanggal Pinjam</label>
-                        <input type="date" id="tanggal_peminjaman" name="tanggal_peminjaman" value="{{ $data->tanggal_peminjaman }}" class="form-control">
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="jam_mulai" class="form-label">Jam Mulai</label>
-                        <input type="time" id="jam_mulai" name="jam_mulai" value="{{ $data->jam_mulai }}" class="form-control">
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="jam_selesai" class="form-label">Jam Selesai</label>
-                        <input type="time" id="jam_selesai" name="jam_selesai" value="{{ $data->jam_selesai }}" class="form-control">
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="keperluan" class="form-label">Keperluan</label>
-                        <textarea class="form-control" id="keperluan" name="keperluan" style="height: 100px;">{{ $data->keperluan }}</textarea>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
-                </form>
+                </div>
             </div>
         </div>
     </div>
 </div>
 @endforeach
+
+
+<!-- JS Script for Search Functionality -->
+<script>
+    document.getElementById("searchInput").addEventListener("keyup", function() {
+        const filter = this.value.toLowerCase();
+        const rows = document.querySelectorAll("#tableBody tr");
+
+        rows.forEach(row => {
+            const cells = row.getElementsByTagName("td");
+            const roomName = cells[0].textContent.toLowerCase();
+            const createdDate = cells[1].textContent.toLowerCase();
+
+            if (roomName.includes(filter) || createdDate.includes(filter)) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    });
+</script>
 
 </body>
 </html>

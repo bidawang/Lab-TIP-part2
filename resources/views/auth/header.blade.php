@@ -38,6 +38,9 @@
   .custom-border {
     border: 1px solid #000; /* Thicker and darker border */
   }
+    .option-small {
+        font-size: 0.875rem; /* Ukuran teks kecil */
+    }
 
 </style>
 

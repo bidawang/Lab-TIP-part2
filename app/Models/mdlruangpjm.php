@@ -23,4 +23,9 @@ class mdlruangpjm extends Model
         'tipe_peminjaman',
         'created_by'
     ];
+
+    public function user()
+{
+    return $this->belongsTo(mdlakun::class, 'google_id', 'google_id');
+}
 }

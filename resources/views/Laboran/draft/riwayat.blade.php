@@ -1,4 +1,5 @@
 @include('auth.header')
+
 <body>
   @include('auth.headerbody')
   @include('Laboran/sidebar.side')
@@ -95,17 +96,24 @@
                       </tr>
                     </thead>
                     <tbody>
-                      @foreach($pinjam_ruangan as $data)
-                      <tr>
-                        <td>{{ $data->nama_peminjam }}</td>
-                        <td>{{ $data->nama_ruangan }}</td>
-                        <td>{{ $data->jam_mulai }} - {{ $data->jam_selesai }}</td>
-                        <td>{{ $data->tanggal_peminjaman }}</td>
-                        <td>{{ $data->penanggungjawab }}</td>
-                        <td>{{ $data->status }}</td>
-                      </tr>
-                      @endforeach
-                    </tbody>
+    @foreach($pinjam_ruangan as $data)
+        @php
+            // Pecah email menjadi nama yang diformat
+            $nameParts = explode('@', $data->email ?? 'unknown@example.com');
+            $formattedName = ucwords(str_replace('.', ' ', $nameParts[0]));
+        @endphp
+        <tr>
+            <!-- Tampilkan nama pengguna yang diformat -->
+            <td>{{ $formattedName }}</td>
+            <td>{{ $data->nama_ruangan }}</td>
+            <td>{{ $data->jam_mulai }} - {{ $data->jam_selesai }}</td>
+            <td>{{ $data->tanggal_peminjaman }}</td>
+            <td>{{ $data->penanggungjawab }}</td>
+            <td>{{ $data->status }}</td>
+        </tr>
+    @endforeach
+</tbody>
+
                   </table>
                 </div>
               </div>

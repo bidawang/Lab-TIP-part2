@@ -13,7 +13,7 @@
 @include('auth.headerbody')
 @include('Laboran/sidebar.side')
 
-<main id="main" class="main">
+<main id="main" class="main small">
 
     <div class="pagetitle">
         <h1>Ruangan</h1>
@@ -43,13 +43,13 @@
     <div class="row">
         <div class="col-lg-12">
         @if (session('level') !='Mahasiswa')
-            <a href="{{ route('truang') }}" class="btn btn-primary mt-3"><i class="bi bi-plus-circle"></i> Tambah Ruangan</a>
+            <a href="{{ route('truang') }}" class="btn btn-sm btn-primary mb-3"><i class="bi bi-plus-circle"></i> Tambah Ruangan</a>
             @endif
           
             @if (is_null(session('NIM')) || is_null(session('semester')) || is_null(session('no_hp')))
             <h4 class="breadcum-item">Silahkan lengkapi profil anda terlebih dahulu</h4>
             @else
-            <a href="{{ route('ruangpjm') }}" class="btn btn-info mt-3"><i class="bi bi-file-earmark-plus-fill"></i> Pinjam Ruangan</a>
+            <a href="{{ route('ruangpjm') }}" class="btn btn-sm btn-info"><i class="bi bi-file-earmark-plus-fill"></i> Pinjam Ruangan</a>
 
             @endif
             <input type="text" id="searchInput" class="form-control mt-3" placeholder="Cari Ruangan...">
@@ -58,10 +58,10 @@
                     <h1><b>DATA TIDAK DITEMUKAN</b></h1>
                 </center>
             </div>
-            <div class="row mt-4">
+            <div class="row mt-3">
                 @foreach($ruang as $data)
-                <div class="col-md-4 mb-4">
-                    <div class="card custom-border h-100">
+                <div class="col mb-3">
+                    <div class="card custom-border h-80">
                         <img src="{{ asset('Foto Ruang/' . $data->foto_ruangan) }}" class="card-img-top" alt="Foto Ruang">
                         <div class="card-body">
                             <h5 class="card-title">{{ $data->nama_ruangan }}</h5>
@@ -70,14 +70,14 @@
                             <p class="card-text">Status: {{ $data->status }}</p>
                             @if (session('level') !='Mahasiswa')
 
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal{{ $data->id_ruangan }}">
+                            <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#editModal{{ $data->id_ruangan }}">
                               <i class="bi bi-pencil-square"></i> Edit
                             </button>
                             <form action="/ruang/hapus" method="POST" style="display: inline;">
                                 @csrf
                                 @method('DELETE')
                                 <input type="hidden" name="id_ruangan" value="{{ $data->id_ruangan }}">
-                                <button type="submit" class="btn btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
                                     <i class="bi bi-trash3"></i> Hapus
                                 </button>
                             </form>

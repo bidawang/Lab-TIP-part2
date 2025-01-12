@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\mdlakun;
 use App\Models\User;
 use App\Models\mdlalatpjm;
 use App\Models\mdlbahanuse;
 use App\Models\mdlruangpjm;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class heafoctrl extends Controller
 {
@@ -145,15 +147,25 @@ public function indexDraft(Request $request)
 
     }
 
-    public function riwayat(){
-        $alat_pinjam = mdlalatpjm::all();
-        $bahan_pakai = mdlbahanuse::all();
-        $pinjam_ruangan = mdlruangpjm::all();
-        return view('Laboran/draft.riwayat', [
-            'alat_pinjam' => $alat_pinjam,
-            'bahan_pakai' => $bahan_pakai,
-            'pinjam_ruangan' => $pinjam_ruangan,
-        ]);
-    }
+    public function riwayat()
+{
+    // Mengambil data alat, bahan, dan ruangan
+    $alat_pinjam = mdlalatpjm::all();
+    $bahan_pakai = mdlbahanuse::all();
+
+    // Melakukan join antara mdlruangpjm dan mdlakun untuk mendapatkan email
+    $pinjam_ruangan = mdlruangpjm::join('users', function ($join) {
+        $join->on(DB::raw('BINARY pinjam_ruangan.google_id'), '=', DB::raw('BINARY users.google_id'));
+    })->select('pinjam_ruangan.*', 'users.email')->get();
+    
+
+    // Mengirimkan data ke view
+    return view('Laboran/draft.riwayat', [
+        'alat_pinjam' => $alat_pinjam,
+        'bahan_pakai' => $bahan_pakai,
+        'pinjam_ruangan' => $pinjam_ruangan,
+    ]);
+}
+
     
 }

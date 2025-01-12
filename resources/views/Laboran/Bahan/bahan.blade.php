@@ -40,18 +40,19 @@
             <div class="row">
                 <div class="col-lg-12 mb-3">
                     @if (session('level') != 'Mahasiswa')
-                        <a href="{{ route('tbahan') }}" class="btn btn-primary mt-3"><i class="bi bi-plus-circle"></i>
+                        <a href="{{ route('tbahan') }}" class="btn btn-sm btn-primary mt-3"><i class="bi bi-plus-circle"></i>
                             Bahan</a>
                     @endif
 
                     @if (is_null(session('NIM')) || is_null(session('semester')) || is_null(session('no_hp')))
                         <h4 class="breadcum-item">Silahkan lengkapi profil anda terlebih dahulu</h4>
                     @else
-                        <a href="{{ route('bahan_pakai') }}" class="btn btn-info text-muted mt-3"><i
+                        <a href="{{ route('bahan_pakai') }}" class="btn btn-sm btn-info text-muted mt-3"><i
                                 class="bi bi-file-earmark-plus-fill"></i> Pakai Bahan</a>
                     @endif
-                    <input type="text" id="searchInput" onkeyup="filterTable('searchInput', 'bahanTable')"
-                        class="form-control mt-3" placeholder="Cari...">
+                    
+                        <input type="text" id="searchInput" onkeyup="filterTable()" class="form-control mt-3" placeholder="Cari...">
+
                 </div>
             </div>
 
@@ -70,10 +71,9 @@
             </div>
 
             <!-- Tabel Data -->
-            <table id="bahanTable" class="table table-bordered table-sm small align-middle text-center custom-border">
+            <table id="bahanTable" class="table table-hover table-sm small align-middle text-center">
                 <thead>
                     <tr>
-                        <th>Foto</th>
                         <th>Bahan</th>
                         <th>Jumlah</th>
                         <th>Action</th>
@@ -82,15 +82,14 @@
                 <tbody>
                     @foreach ($bahan as $data)
                         <tr class="filtered-item">
-                            <td><img src="{{ asset('Foto Bahan/' . $data->foto_bahan) }}" alt="Foto Bahan"
-                                    class="img-fluid" style="max-width: 80px; height: auto;"></td>
+                            
                             <td class="small">{{ $data->nama_bahan }}</td>
                             <td class="small">{{ $data->stok }} {{ $data->satuan }}</td>
-                            <td>
+                            <td class="small">
                                 @if (session('level') != 'Mahasiswa')
                                     <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
                                         data-target="#editModal{{ $data->id_bahan }}">
-                                        <i class="bi bi-pencil-square"></i> Edit
+                                        <i class="bi bi-pencil-square"></i>
                                     </button>
                                     <form action="/bahan/hapus" method="POST" style="display: inline;">
                                         @csrf
@@ -98,14 +97,14 @@
                                         <input type="hidden" name="id_bahan" value="{{ $data->id_bahan }}">
                                         <button type="submit" class="btn btn-danger btn-sm"
                                             onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
-                                            <i class="bi bi-trash3"></i> Hapus
+                                            <i class="bi bi-trash3"></i>
                                         </button>
                                     </form>
                                 @endif
                                 <!-- Button Detail -->
                                 <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
                                     data-target="#detailModal{{ $data->id_bahan }}">
-                                    <i class="bi bi-eye"></i> Detail
+                                    <i class="bi bi-eye"></i>
                                 </button>
                             </td>
                         </tr>
@@ -113,45 +112,38 @@
                 </tbody>
             </table>
 
-            <script>
-                function filterTable(inputId, tableId) {
-                    var input, filter, table, tr, td, i, j, txtValue;
-                    input = document.getElementById(inputId);
-                    filter = input.value.toUpperCase();
-                    table = document.getElementById(tableId);
-                    tr = table.getElementsByTagName("tr");
-                    var found = false;
 
-                    for (i = 1; i < tr.length; i++) {
-                        td = tr[i].getElementsByTagName("td");
-                        for (j = 1; j < td.length - 1; j++) { // Exclude action column for search
-                            if (td[j]) {
-                                txtValue = td[j].textContent || td[j].innerText;
-                                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                                    tr[i].style.display = "";
-                                    found = true;
-                                    break;
-                                } else {
-                                    tr[i].style.display = "none";
-                                }
-                            }
-                        }
-                    }
+<script>
+    function filterTable() {
+        const input = document.getElementById('searchInput');
+        const filter = input.value.toLowerCase();
+        const table = document.getElementById('bahanTable');
+        const rows = table.getElementsByTagName('tr');
+        let noDataFound = true;
 
-                    if (!found) {
-                        document.getElementById('noDataFound').style.display = "block";
-                    } else {
-                        document.getElementById('noDataFound').style.display = "none";
-                    }
+        for (let i = 1; i < rows.length; i++) { // Mulai dari 1 untuk menghindari header
+            const cells = rows[i].getElementsByTagName('td');
+            let rowMatch = false;
 
-                    if (filter === '') {
-                        Array.prototype.forEach.call(tr, function(row) {
-                            row.style.display = "";
-                        });
-                        document.getElementById('noDataFound').style.display = "none";
-                    }
+            // Periksa setiap sel dalam baris
+            for (let j = 0; j < cells.length; j++) {
+                const cellContent = cells[j].textContent || cells[j].innerText;
+                if (cellContent.toLowerCase().indexOf(filter) > -1) {
+                    rowMatch = true;
+                    break;
                 }
-            </script>
+            }
+
+            // Tampilkan atau sembunyikan baris berdasarkan kecocokan
+            rows[i].style.display = rowMatch ? '' : 'none';
+            if (rowMatch) noDataFound = false;
+        }
+
+        // Tampilkan pesan "DATA TIDAK DITEMUKAN" jika tidak ada data yang cocok
+        document.getElementById('noDataFound').style.display = noDataFound ? '' : 'none';
+    }
+</script>
+
         </section>
     </main>
 
