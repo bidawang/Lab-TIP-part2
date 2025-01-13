@@ -5,6 +5,12 @@
 
 <div class="accordion" id="faqAccordion">
     @foreach($groupedData as $kode_alat => $group)
+        @php
+            // Mengecek apakah semua status dalam grup adalah "selesai"
+            $allApproved = $group->every(fn($data) => $data->tanggal_kembali != NULL);
+        @endphp
+
+        @if(!$allApproved) <!-- Only show if not all statuses are "selesai" -->
         <div class="accordion-item">
             <h2 class="accordion-header" id="heading{{ $kode_alat }}">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $kode_alat }}" aria-expanded="true" aria-controls="collapse{{ $kode_alat }}">
@@ -23,24 +29,23 @@
                         $tempat_peminjaman = $group->first()->tempat_peminjaman;
                     @endphp
                     <div class="table-responsive mb-3 align-middle text-center">
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Tanggal Pengajuan</th>
-                <th>Tanggal Peminjaman</th>
-                <th>Tempat Peminjaman</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>{{ $tanggal_pengajuan }}</td>
-                <td>{{ $tanggal_peminjaman }}</td>
-                <td>{{ $tempat_peminjaman }}</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Tanggal Pengajuan</th>
+                                    <th>Tanggal Peminjaman</th>
+                                    <th>Tempat Peminjaman</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{ $tanggal_pengajuan }}</td>
+                                    <td>{{ $tanggal_peminjaman }}</td>
+                                    <td>{{ $tempat_peminjaman }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
                     <!-- Tabel Data -->
                     <table class="table table-bordered text-center align-middle">
@@ -53,15 +58,14 @@
                         </thead>
                         <tbody>
                             @foreach($group as $data)
-                                @if($data->tanggal_kembali == NULL)
+                                @if($data->tanggal_kembali == NULL) <!-- Tampilkan hanya yang belum kembali -->
                                     <tr>
                                         <td>{{ $data->nama_alat }}</td>
-                                        <td>{{ $data->jumlah }} {{$data->satuan}}</td>
+                                        <td>{{ $data->jumlah }} {{ $data->satuan }}</td>
                                         <td>
                                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal{{ $data->id_alat_pinjam }}">
                                                 {{ $data->status }}
                                             </button>
-                                        
                                             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#selesai{{ $data->id_alat_pinjam }}">
                                                 Selesai
                                             </button>
@@ -74,5 +78,6 @@
                 </div>
             </div>
         </div>
+        @endif
     @endforeach
 </div>

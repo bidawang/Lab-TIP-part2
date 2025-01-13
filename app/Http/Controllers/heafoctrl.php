@@ -156,16 +156,27 @@ public function indexDraft(Request $request)
     // Melakukan join antara mdlruangpjm dan mdlakun untuk mendapatkan email
     $pinjam_ruangan = mdlruangpjm::join('users', function ($join) {
         $join->on(DB::raw('BINARY pinjam_ruangan.google_id'), '=', DB::raw('BINARY users.google_id'));
-    })->select('pinjam_ruangan.*', 'users.email')->get();
-    
+    })
+    ->select('pinjam_ruangan.*', 'users.email') // Select email field from users
+    ->get();
+    // Grouping data by 'nama_peminjam' for alat pinjam
+    $groupedAlatPinjam = $alat_pinjam->where('status', 'selesai')->groupBy('nama_peminjam');
+
+    // Grouping data by 'nama_pemakai' for bahan pakai
+    $groupedBahanPakai = $bahan_pakai->where('status', 'Disetujui')->groupBy('nama_pemakai');
+
+    // Grouping data by 'nama_peminjam' for pinjam ruangan
+    $groupedPinjamRuangan = $pinjam_ruangan->where('status', 'Disetujui')->groupBy('nama_peminjam');
 
     // Mengirimkan data ke view
     return view('Laboran/draft.riwayat', [
-        'alat_pinjam' => $alat_pinjam,
-        'bahan_pakai' => $bahan_pakai,
-        'pinjam_ruangan' => $pinjam_ruangan,
+        'groupedAlatPinjam' => $groupedAlatPinjam,
+        'groupedBahanPakai' => $groupedBahanPakai,
+        'groupedPinjamRuangan' => $groupedPinjamRuangan,
+        'namafgid' => $pinjam_ruangan
     ]);
 }
+
 
     
 }

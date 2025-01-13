@@ -49,7 +49,7 @@
             @if (is_null(session('NIM')) || is_null(session('semester')) || is_null(session('no_hp')))
             <h4 class="breadcum-item">Silahkan lengkapi profil anda terlebih dahulu</h4>
             @else
-            <a href="{{ route('ruangpjm') }}" class="btn btn-sm btn-info"><i class="bi bi-file-earmark-plus-fill"></i> Pinjam Ruangan</a>
+            <a href="{{ route('ruangpjm') }}" class="btn btn-sm btn-info mb-3"><i class="bi bi-file-earmark-plus-fill"></i> Pinjam Ruangan</a>
 
             @endif
             <input type="text" id="searchInput" class="form-control mt-3" placeholder="Cari Ruangan...">

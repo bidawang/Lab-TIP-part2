@@ -89,9 +89,17 @@
                                                     </tbody>
                                                 </table>
                                                 <div class="text-end mt-2">
+                                                @php
+                    // Cek apakah semua status dalam grup adalah "Diterima"
+                    $allAccepted = $group->every(function($item) {
+                        return $item->status === 'Disetujui';
+                    });
+                @endphp
+                @if($allAccepted)
                         <a href="{{ route('printbah', ['kode_bahan_pakai' => $kode_bahan]) }}" class="btn btn-success btn-sm">
                             <i class="bi bi-printer me-2"></i> Print
                         </a>
+                        @endif
                     </div>
                                             </div>
                                         </div>

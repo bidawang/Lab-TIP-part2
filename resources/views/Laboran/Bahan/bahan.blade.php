@@ -60,7 +60,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card custom-border">
-                            <div class="card-body">
+                            <div class="card-body mt-4">
                                 <center>
                                     <h1><b>DATA TIDAK DITEMUKAN</b></h1>
                                 </center>

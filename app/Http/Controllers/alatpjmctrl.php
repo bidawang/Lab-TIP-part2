@@ -214,7 +214,7 @@ private function bulanRomawi($bulan)
             'tanggal_kembali' => $tanggalKembali,
         ]);
     
-        return redirect()->route('draftpinjammhs', ['google_id' => $google_id])->with('success', 'Stok Alat Berhasil Diperbarui');
+        return redirect()->back()->with('success', 'Stok Alat Berhasil Diperbarui');
 
     }
 }

@@ -43,59 +43,66 @@
                         </div>
                         <div class="accordion mt-3 small" id="faqAccordion">
                             
-    @foreach($groupedData as $kode_alat => $group)
-        <div class="accordion-item small">
-            <h2 class="accordion-header" id="heading{{ $kode_alat }}">
-                <button class="accordion-button btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $kode_alat }}" aria-expanded="true" aria-controls="collapse{{ $kode_alat }}">
+                        @foreach($groupedData as $kode_alat => $group)
+    <div class="accordion-item small">
+        <h2 class="accordion-header" id="heading{{ $kode_alat }}">
+            <button class="accordion-button btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $kode_alat }}" aria-expanded="true" aria-controls="collapse{{ $kode_alat }}">
                 <div class="small">
-                <div class="small">  
+                    {{ $kode_alat }} ({{ count($group) }} Data)
+                </div>
+            </button>
+        </h2>
+        <div id="collapse{{ $kode_alat }}" class="accordion-collapse collapse" aria-labelledby="heading{{ $kode_alat }}" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+                <!-- Menampilkan Tanggal -->
+                @php
+                    $tanggal_pemakaian = \Carbon\Carbon::parse($group->first()->tanggal_pemakaian)->isoFormat('DD MMMM YYYY');
+                @endphp
+                <div class="mb-2">
+                    <strong>{{ $tanggal_pemakaian }}</strong>
+                </div>
 
-                {{ $kode_alat }} ({{ count($group) }} Data)</div></div>  
-                </button>
-            </h2>
-            <div id="collapse{{ $kode_alat }}" class="accordion-collapse collapse" aria-labelledby="heading{{ $kode_alat }}" data-bs-parent="#faqAccordion">
-                <div class="accordion-body">
-                    <!-- Menampilkan Tanggal -->
-                    @php
-                        $tanggal_pemakaian = \Carbon\Carbon::parse($group->first()->tanggal_pemakaian)->isoFormat('DD MMMM YYYY');
-                    @endphp
-                    <div class="mb-2">
-                        <strong>{{ $tanggal_pemakaian }}</strong> 
-                    </div>
-
-                    <!-- Tabel Data -->
-                    <table class="table table-sm table-bordered align-middle text-center">
-                        <thead class="table-light">
+                <!-- Tabel Data -->
+                <table class="table table-sm table-bordered align-middle text-center">
+                    <thead class="table-light">
+                        <tr>
+                            <th>No</th>
+                            <th>Alat</th>
+                            <th>Jumlah</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($group as $data)
                             <tr>
-                                <th>No</th>
-                                <th>Alat</th>
-                                <th>Jumlah</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                       
-                            @foreach($group as $data)
-                                <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $data->nama_alat }}</td>
-                                    <td>{{ $data->jumlah }} {{ $data->satuan }}</td>
-                                    <td>{{ $data->status }}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                                <td>{{ $data->jumlah }} {{ $data->satuan }}</td>
+                                <td>{{ $data->status }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
 
-                    <!-- Tombol Print -->
+                <!-- Tombol Print -->
+                @php
+                    // Cek apakah semua status dalam grup adalah "Diterima"
+                    $allAccepted = $group->every(function($item) {
+                        return $item->status === 'Disetujui';
+                    });
+                @endphp
+                @if($allAccepted)
                     <div class="text-end mt-2">
                         <a href="{{ route('printalatpjm', ['kode_alat_pinjam' => $kode_alat]) }}" class="btn btn-success btn-sm">
                             <i class="bi bi-printer me-2"></i> Print
                         </a>
                     </div>
-                </div>
+                @endif
             </div>
         </div>
-    @endforeach
+    </div>
+@endforeach
+
 </div>
 
 
