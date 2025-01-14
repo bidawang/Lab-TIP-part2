@@ -160,13 +160,13 @@ public function indexDraft(Request $request)
     ->select('pinjam_ruangan.*', 'users.email') // Select email field from users
     ->get();
     // Grouping data by 'nama_peminjam' for alat pinjam
-    $groupedAlatPinjam = $alat_pinjam->where('status', 'selesai')->groupBy('nama_peminjam');
+    $groupedAlatPinjam = $alat_pinjam->where('tanggal_kembali', !NULL)->groupBy('nama_peminjam');
 
     // Grouping data by 'nama_pemakai' for bahan pakai
     $groupedBahanPakai = $bahan_pakai->where('status', 'Disetujui')->groupBy('nama_pemakai');
 
     // Grouping data by 'nama_peminjam' for pinjam ruangan
-    $groupedPinjamRuangan = $pinjam_ruangan->where('status', 'Disetujui')->groupBy('nama_peminjam');
+    $groupedPinjamRuangan = $pinjam_ruangan->where('status', 'Disetujui')->groupBy('created_by');
 
     // Mengirimkan data ke view
     return view('Laboran/draft.riwayat', [

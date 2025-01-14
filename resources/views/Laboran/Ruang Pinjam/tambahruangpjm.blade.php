@@ -36,6 +36,7 @@
                     
                     <input type="hidden" name="status" value="tunggu">
                     <input type="hidden" name="google_id" value="{{ Auth::user()->google_id }}">
+                    <input type="hidden" name="created_by" value="{{$formattedName}}" id="">
 
 
                     <div class="col-6">

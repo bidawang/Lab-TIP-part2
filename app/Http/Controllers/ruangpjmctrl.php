@@ -28,11 +28,10 @@ class ruangpjmctrl extends Controller
             'mata_kuliah'=> 'required',
             'status'=> 'required',
             'google_id'=>'required',
+            'created_by' => 'required',
             'nama_ruangan'=> 'required',
             'tipe_peminjaman'=> 'required',
-        ]);
-        $validasidata['created_by'] = $request->google_id;
-        
+        ]);        
             mdlruangpjm::create($validasidata);
 
     return redirect()->route('ruangpjm')->with('message', 'Surat Berhasil Ditambahkan');

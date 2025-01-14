@@ -90,7 +90,7 @@
                     <tbody>
                       @foreach($groupedPinjamRuangan as $name => $group)
                         <tr>
-                          <td>{{ $name }}</td>
+                          <td>{{ $name }}</td>  
                           <td>
                             <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal_{{ Str::slug($name) }}">Detail</button>
                           </td>
