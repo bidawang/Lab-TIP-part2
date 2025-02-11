@@ -45,7 +45,9 @@
                     @endif
 
                     @if (is_null(session('NIM')) || is_null(session('semester')) || is_null(session('no_hp')))
-                        <h4 class="breadcum-item">Silahkan lengkapi profil anda terlebih dahulu</h4>
+                        <h6 class="breadcum-item">Silahkan lengkapi profil anda terlebih dahulu</h6>
+                        <a href="myprofile">Klik Disini</a>
+
                     @else
                         <a href="{{ route('bahan_pakai') }}" class="btn btn-sm btn-info text-muted mt-3"><i
                                 class="bi bi-file-earmark-plus-fill"></i> Pakai Bahan</a>
