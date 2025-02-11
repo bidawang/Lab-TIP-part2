@@ -31,7 +31,7 @@ class heafoctrl extends Controller
     $pinjam_ruangan = $pinjam_ruangan->get();
 
     // Mengirimkan data dari tiga model ke tampilan
-    return view('Laboran/draft.drafalat', [
+    return view('Laboran/draft/personal.drafalat', [
         'alat_pinjam' => $alat_pinjam,
         'bahan_pakai' => $bahan_pakai,
         'pinjam_ruangan' => $pinjam_ruangan,
@@ -71,25 +71,25 @@ class heafoctrl extends Controller
     ]);
 }
 
-public function indexDraft(Request $request)
-{
-    $alat_pinjam = MdlAlatPjm::query();
-    $bahan_pakai = MdlBahanUse::query();
-    $pinjam_ruangan = MdlRuangPjm::query();
+// public function indexDraft(Request $request)
+// {
+//     $alat_pinjam = MdlAlatPjm::query();
+//     $bahan_pakai = MdlBahanUse::query();
+//     $pinjam_ruangan = MdlRuangPjm::query();
 
-    // Filter berdasarkan created_at jika request parameter created_at diberikan
-    if ($request->has('created_at')) {
-        $alat_pinjam->whereDate('created_at', $request->created_at);
-        $bahan_pakai->whereDate('created_at', $request->created_at);
-        $pinjam_ruangan->whereDate('created_at', $request->created_at);
-    }
+//     // Filter berdasarkan created_at jika request parameter created_at diberikan
+//     if ($request->has('created_at')) {
+//         $alat_pinjam->whereDate('created_at', $request->created_at);
+//         $bahan_pakai->whereDate('created_at', $request->created_at);
+//         $pinjam_ruangan->whereDate('created_at', $request->created_at);
+//     }
 
-    $alat_pinjam = $alat_pinjam->get();
-    $bahan_pakai = $bahan_pakai->get();
-    $pinjam_ruangan = $pinjam_ruangan->get();
+//     $alat_pinjam = $alat_pinjam->get();
+//     $bahan_pakai = $bahan_pakai->get();
+//     $pinjam_ruangan = $pinjam_ruangan->get();
 
-    return view('Laboran.draft.drafalat', compact('alat_pinjam', 'bahan_pakai', 'pinjam_ruangan'));
-}
+//     return view('Laboran/draft/personal.drafalat', compact('alat_pinjam', 'bahan_pakai', 'pinjam_ruangan'));
+// }
 
     public function statbah(Request $request){
         

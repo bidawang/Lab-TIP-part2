@@ -24,12 +24,6 @@ class CheckUserRole
         }
 
         $user = Auth::user();
-
-        // Memeriksa apakah level pengguna termasuk dalam daftar roles yang diizinkan
-        if (!in_array($user->level, $roles)) {
-            abort(403, 'Unauthorized action.');
-        }
-
         return $next($request);
     }
 }
